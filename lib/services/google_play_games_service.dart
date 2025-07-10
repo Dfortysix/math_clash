@@ -1,5 +1,6 @@
 import 'package:google_sign_in/google_sign_in.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'firebase_service.dart';
 
 class GooglePlayGamesService {
   static final GoogleSignIn _googleSignIn = GoogleSignIn(
@@ -60,8 +61,7 @@ class GooglePlayGamesService {
 
   // Kiểm tra xem user có đăng nhập Google không
   static bool isSignedInWithGoogle() {
-    final user = FirebaseAuth.instance.currentUser;
-    return user != null && user.providerData.any((profile) => profile.providerId == 'google.com');
+    return FirebaseService.isSignedInWithGoogle();
   }
 
   // Lấy display name từ Google
@@ -80,6 +80,52 @@ class GooglePlayGamesService {
   static String? getGooglePhotoUrl() {
     final user = FirebaseAuth.instance.currentUser;
     return user?.photoURL;
+  }
+
+  // Lưu điểm vào Firebase cho user Google
+  static Future<bool> saveScore(int score, String gameMode) async {
+    try {
+      if (!isSignedInWithGoogle()) {
+        print('GooglePlayGamesService: User chưa đăng nhập Google');
+        return false;
+      }
+
+      await FirebaseService.saveScoreForGoogleUser(score, gameMode);
+      print('GooglePlayGamesService: Đã lưu điểm thành công');
+      return true;
+    } catch (e) {
+      print('GooglePlayGamesService: Lỗi khi lưu điểm: $e');
+      return false;
+    }
+  }
+
+  // Lấy điểm cao nhất của user
+  static Future<int?> getUserHighScore(String gameMode) async {
+    try {
+      if (!isSignedInWithGoogle()) {
+        return null;
+      }
+      return await FirebaseService.getUserHighScore(gameMode);
+    } catch (e) {
+      print('GooglePlayGamesService: Lỗi khi lấy điểm cao nhất: $e');
+      return null;
+    }
+  }
+
+  // Lấy rank của user
+  static Future<int> getUserRank(String gameMode) async {
+    try {
+      if (!isSignedInWithGoogle()) {
+        return -1;
+      }
+      final user = getCurrentUser();
+      if (user == null) return -1;
+      
+      return await FirebaseService.getUserRank(user.uid, gameMode);
+    } catch (e) {
+      print('GooglePlayGamesService: Lỗi khi lấy rank: $e');
+      return -1;
+    }
   }
 
   // Khởi tạo Google Play Games Services (tạm thời disabled)

@@ -1,6 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/question.dart';
 import '../services/question_generator.dart';
+import '../services/google_play_games_service.dart';
 
 class SoloModeState {
   final List<Question> questions;
@@ -9,6 +10,8 @@ class SoloModeState {
   final int timeRemaining;
   final bool isGameOver;
   final bool isLoading;
+  final bool isSavingScore;
+  final String? saveScoreError;
 
   SoloModeState({
     required this.questions,
@@ -17,6 +20,8 @@ class SoloModeState {
     required this.timeRemaining,
     required this.isGameOver,
     required this.isLoading,
+    required this.isSavingScore,
+    this.saveScoreError,
   });
 
   SoloModeState copyWith({
@@ -26,6 +31,8 @@ class SoloModeState {
     int? timeRemaining,
     bool? isGameOver,
     bool? isLoading,
+    bool? isSavingScore,
+    String? saveScoreError,
   }) {
     return SoloModeState(
       questions: questions ?? this.questions,
@@ -34,6 +41,8 @@ class SoloModeState {
       timeRemaining: timeRemaining ?? this.timeRemaining,
       isGameOver: isGameOver ?? this.isGameOver,
       isLoading: isLoading ?? this.isLoading,
+      isSavingScore: isSavingScore ?? this.isSavingScore,
+      saveScoreError: saveScoreError ?? this.saveScoreError,
     );
   }
 }
@@ -46,6 +55,7 @@ class SoloModeNotifier extends StateNotifier<SoloModeState> {
     timeRemaining: 30,
     isGameOver: false,
     isLoading: false,
+    isSavingScore: false,
   ));
 
   void startNewGame() {
@@ -56,6 +66,7 @@ class SoloModeNotifier extends StateNotifier<SoloModeState> {
       timeRemaining: 30,
       isGameOver: false,
       isLoading: false,
+      saveScoreError: null,
     );
   }
 
@@ -82,10 +93,39 @@ class SoloModeNotifier extends StateNotifier<SoloModeState> {
       currentQuestionIndex: nextQuestionIndex,
       isGameOver: isGameOver,
     );
+
+    // Tự động lưu điểm khi game kết thúc
+    if (isGameOver) {
+      saveScore();
+    }
   }
 
   void updateTimeRemaining(int timeRemaining) {
     state = state.copyWith(timeRemaining: timeRemaining);
+  }
+
+  Future<void> saveScore() async {
+    if (state.score <= 0) return;
+
+    state = state.copyWith(isSavingScore: true, saveScoreError: null);
+
+    try {
+      final success = await GooglePlayGamesService.saveScore(state.score, 'solo');
+      
+      if (success) {
+        print('SoloModeProvider: Đã lưu điểm thành công');
+      } else {
+        state = state.copyWith(
+          saveScoreError: 'Vui lòng đăng nhập bằng Google để lưu điểm',
+        );
+      }
+    } catch (e) {
+      state = state.copyWith(
+        saveScoreError: 'Lỗi khi lưu điểm: $e',
+      );
+    } finally {
+      state = state.copyWith(isSavingScore: false);
+    }
   }
 
   void resetToInitialState() {
@@ -96,7 +136,12 @@ class SoloModeNotifier extends StateNotifier<SoloModeState> {
       timeRemaining: 30,
       isGameOver: false,
       isLoading: false,
+      isSavingScore: false,
     );
+  }
+
+  void clearSaveScoreError() {
+    state = state.copyWith(saveScoreError: null);
   }
 }
 

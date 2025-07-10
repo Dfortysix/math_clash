@@ -4,7 +4,7 @@ import 'package:audioplayers/audioplayers.dart';
 import 'dart:async';
 import '../../models/question.dart';
 import '../../providers/solo_mode_provider.dart';
-import '../../providers/leaderboard_provider.dart';
+import '../../providers/auth_provider.dart';
 
 class SoloModeScreen extends StatefulWidget {
   const SoloModeScreen({super.key});
@@ -20,7 +20,6 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
   String? _selectedAnswer;
   bool? _isCorrect;
   bool _isAnimating = false;
-  bool _hasShownSaveDialog = false; // Flag để tránh hiển thị dialog nhiều lần
   bool _hasResetState = false; // Flag để kiểm tra đã reset state chưa
   final AudioPlayer _fxPlayer = AudioPlayer();
 
@@ -41,7 +40,6 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
     _selectedAnswer = null;
     _isCorrect = null;
     _isAnimating = false;
-    _hasShownSaveDialog = false;
     _hasResetState = false;
   }
 
@@ -92,7 +90,6 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
   void _startNewGame(WidgetRef ref) {
     ref.read(soloModeProvider.notifier).startNewGame();
     _resetTimer(ref);
-    _hasShownSaveDialog = false; // Reset flag khi bắt đầu game mới
   }
 
   void _onAnswerTap(WidgetRef ref, String option, String correctAnswer) async {
@@ -112,69 +109,6 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
       _isCorrect = null;
       _isAnimating = false;
     });
-  }
-
-  Future<void> _showSaveScoreDialog(WidgetRef ref, int score) async {
-    final TextEditingController nameController = TextEditingController();
-    
-    return showDialog(
-      context: context,
-      barrierDismissible: false,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Lưu điểm số'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              Text('Điểm số của bạn: $score'),
-              const SizedBox(height: 16),
-              TextField(
-                controller: nameController,
-                decoration: const InputDecoration(
-                  labelText: 'Nhập tên của bạn',
-                  border: OutlineInputBorder(),
-                ),
-                maxLength: 20,
-              ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () {
-                print('Người dùng bỏ qua lưu điểm');
-                Navigator.of(context).pop();
-              },
-              child: const Text('Bỏ qua'),
-            ),
-            ElevatedButton(
-              onPressed: () async {
-                final username = nameController.text.trim();
-                print('Đang lưu điểm: username=$username, score=$score');
-                if (username.isNotEmpty) {
-                  try {
-                    await ref.read(leaderboardProvider.notifier).saveScore(username, score, 'solo');
-                    print('Đã lưu điểm thành công!');
-                    Navigator.of(context).pop();
-                  } catch (e) {
-                    print('Lỗi khi lưu điểm: $e');
-                    // Hiển thị thông báo lỗi
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Lỗi khi lưu điểm: $e')),
-                    );
-                  }
-                } else {
-                  print('Username trống, không lưu điểm');
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(content: Text('Vui lòng nhập tên của bạn')),
-                  );
-                }
-              },
-              child: const Text('Lưu'),
-            ),
-          ],
-        );
-      },
-    );
   }
 
   @override
@@ -200,6 +134,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
         child: Consumer(
           builder: (context, ref, child) {
             final soloState = ref.watch(soloModeProvider);
+            final authState = ref.watch(authProvider);
             
             // Reset provider state một lần duy nhất khi vào màn hình
             if (!_hasResetState) {
@@ -209,21 +144,32 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
               });
             }
             
+            // Hiển thị thông báo lỗi lưu điểm
+            if (soloState.saveScoreError != null) {
+              WidgetsBinding.instance.addPostFrameCallback((_) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Text(soloState.saveScoreError!),
+                    backgroundColor: Colors.orange,
+                    action: SnackBarAction(
+                      label: 'Đóng',
+                      textColor: Colors.white,
+                      onPressed: () {
+                        ref.read(soloModeProvider.notifier).clearSaveScoreError();
+                      },
+                    ),
+                  ),
+                );
+              });
+            }
+            
             if (soloState.questions.isEmpty) {
-              return _buildStartScreen(ref);
+              return _buildStartScreen(ref, authState);
             }
             
             if (soloState.isGameOver) {
               _timer?.cancel();
-              // Hiển thị dialog lưu điểm khi game over (chỉ hiển thị một lần)
-              if (!_hasShownSaveDialog) {
-                _hasShownSaveDialog = true;
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  print('Game over, hiển thị dialog lưu điểm với score: ${soloState.score}');
-                  _showSaveScoreDialog(ref, soloState.score);
-                });
-              }
-              return _buildGameOverScreen(ref, soloState);
+              return _buildGameOverScreen(ref, soloState, authState);
             }
             
             return _buildGameScreen(ref, soloState);
@@ -233,7 +179,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
     );
   }
 
-  Widget _buildStartScreen(WidgetRef ref) {
+  Widget _buildStartScreen(WidgetRef ref, AuthState authState) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
@@ -248,6 +194,35 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
             textAlign: TextAlign.center,
             style: TextStyle(fontSize: 18),
           ),
+          const SizedBox(height: 20),
+          
+          // Hiển thị trạng thái đăng nhập Google
+          if (!authState.isGoogleSignedIn)
+            Container(
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.orange.shade100,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.orange.shade300),
+              ),
+              child: Row(
+                children: [
+                  Icon(Icons.info_outline, color: Colors.orange.shade700),
+                  const SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Đăng nhập Google để lưu điểm vào bảng xếp hạng',
+                      style: TextStyle(
+                        color: Colors.orange.shade700,
+                        fontSize: 14,
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          
           const SizedBox(height: 40),
           ElevatedButton(
             onPressed: () => _startNewGame(ref),
@@ -415,17 +390,90 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
     );
   }
 
-  Widget _buildGameOverScreen(WidgetRef ref, SoloModeState state) {
+  Widget _buildGameOverScreen(WidgetRef ref, SoloModeState state, AuthState authState) {
     return Center(
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          // Đổi từ 'Game Over!' sang thông báo điểm
+          // Thông báo điểm
           Text(
             'Bạn đã hoàn thành!\nSố điểm: ${state.score}',
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
+          
+          const SizedBox(height: 20),
+          
+          // Hiển thị trạng thái lưu điểm
+          if (state.isSavingScore)
+            Container(
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.blue.shade100,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.blue.shade300),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const SizedBox(
+                    width: 20,
+                    height: 20,
+                    child: CircularProgressIndicator(strokeWidth: 2),
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    'Đang lưu điểm...',
+                    style: TextStyle(
+                      color: Colors.blue.shade700,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          
+          // Hiển thị thông báo khi chưa đăng nhập Google
+          if (!authState.isGoogleSignedIn && !state.isSavingScore)
+            Container(
+              padding: const EdgeInsets.all(16),
+              margin: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: Colors.orange.shade100,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: Colors.orange.shade300),
+              ),
+              child: Column(
+                children: [
+                  Row(
+                    children: [
+                      Icon(Icons.info_outline, color: Colors.orange.shade700),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Đăng nhập Google để lưu điểm',
+                          style: TextStyle(
+                            color: Colors.orange.shade700,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    'Điểm số sẽ không được lưu vào bảng xếp hạng',
+                    style: TextStyle(
+                      color: Colors.orange.shade600,
+                      fontSize: 14,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          
           const SizedBox(height: 40),
           ElevatedButton(
             onPressed: () => _startNewGame(ref),

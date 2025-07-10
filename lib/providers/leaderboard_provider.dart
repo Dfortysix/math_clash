@@ -7,12 +7,14 @@ class LeaderboardState {
   final bool isLoading;
   final String? error;
   final String selectedGameMode;
+  final bool isGoogleSignedIn;
 
   LeaderboardState({
     required this.entries,
     required this.isLoading,
     this.error,
     required this.selectedGameMode,
+    required this.isGoogleSignedIn,
   });
 
   LeaderboardState copyWith({
@@ -20,12 +22,14 @@ class LeaderboardState {
     bool? isLoading,
     String? error,
     String? selectedGameMode,
+    bool? isGoogleSignedIn,
   }) {
     return LeaderboardState(
       entries: entries ?? this.entries,
       isLoading: isLoading ?? this.isLoading,
       error: error ?? this.error,
       selectedGameMode: selectedGameMode ?? this.selectedGameMode,
+      isGoogleSignedIn: isGoogleSignedIn ?? this.isGoogleSignedIn,
     );
   }
 }
@@ -35,7 +39,15 @@ class LeaderboardNotifier extends StateNotifier<LeaderboardState> {
     entries: [],
     isLoading: false,
     selectedGameMode: 'solo',
-  ));
+    isGoogleSignedIn: false,
+  )) {
+    _checkGoogleSignInStatus();
+  }
+
+  void _checkGoogleSignInStatus() {
+    final isGoogleSignedIn = FirebaseService.isSignedInWithGoogle();
+    state = state.copyWith(isGoogleSignedIn: isGoogleSignedIn);
+  }
 
   Future<void> loadLeaderboard({String? gameMode}) async {
     final mode = gameMode ?? state.selectedGameMode;
@@ -60,37 +72,30 @@ class LeaderboardNotifier extends StateNotifier<LeaderboardState> {
     }
   }
 
-  Future<void> saveScore(String username, int score, String gameMode) async {
-    print('LeaderboardProvider: Bắt đầu saveScore - username: $username, score: $score, gameMode: $gameMode');
+  Future<bool> saveScore(int score, String gameMode) async {
+    print('LeaderboardProvider: Bắt đầu saveScore - score: $score, gameMode: $gameMode');
+    
+    // Kiểm tra xem user có đăng nhập Google không
+    if (!FirebaseService.isSignedInWithGoogle()) {
+      print('LeaderboardProvider: User chưa đăng nhập Google');
+      state = state.copyWith(
+        error: 'Vui lòng đăng nhập bằng Google để lưu điểm',
+      );
+      return false;
+    }
     
     try {
-      // Thử lưu điểm không cần authentication trước
-      print('LeaderboardProvider: Thử lưu điểm không cần auth...');
-      await FirebaseService.saveScoreWithoutAuth(username, score, gameMode);
+      await FirebaseService.saveScoreForGoogleUser(score, gameMode);
       print('LeaderboardProvider: Đã lưu điểm thành công, đang reload leaderboard');
       await loadLeaderboard(gameMode: gameMode);
       print('LeaderboardProvider: Đã reload leaderboard xong');
+      return true;
     } catch (e) {
-      print('LeaderboardProvider: Lỗi khi lưu điểm không auth, thử với auth...');
-      
-      // Nếu không được, thử với authentication
-      try {
-        final user = await FirebaseService.ensureUserSignedIn();
-        print('LeaderboardProvider: User sau khi đảm bảo đăng nhập: ${user?.uid}');
-        
-        if (user != null) {
-          await FirebaseService.saveScore(user.uid, username, score, gameMode);
-          print('LeaderboardProvider: Đã lưu điểm thành công với auth, đang reload leaderboard');
-          await loadLeaderboard(gameMode: gameMode);
-          print('LeaderboardProvider: Đã reload leaderboard xong');
-        } else {
-          print('LeaderboardProvider: Không thể đăng nhập user');
-          throw Exception('Không thể đăng nhập user');
-        }
-      } catch (authError) {
-        print('LeaderboardProvider: Lỗi khi lưu điểm với auth: $authError');
-        rethrow;
-      }
+      print('LeaderboardProvider: Lỗi khi lưu điểm: $e');
+      state = state.copyWith(
+        error: 'Lỗi khi lưu điểm: $e',
+      );
+      return false;
     }
   }
 
@@ -102,8 +107,20 @@ class LeaderboardNotifier extends StateNotifier<LeaderboardState> {
     return -1;
   }
 
+  Future<int?> getUserHighScore(String gameMode) async {
+    return await FirebaseService.getUserHighScore(gameMode);
+  }
+
   void changeGameMode(String gameMode) {
     loadLeaderboard(gameMode: gameMode);
+  }
+
+  void clearError() {
+    state = state.copyWith(error: null);
+  }
+
+  void updateGoogleSignInStatus() {
+    _checkGoogleSignInStatus();
   }
 }
 

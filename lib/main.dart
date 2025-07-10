@@ -35,21 +35,6 @@ class _MyAppState extends State<MyApp> {
     super.initState();
     _audioPlayer = AudioPlayer();
     _playBackgroundMusic();
-    _signInAnonymously();
-  }
-
-  Future<void> _signInAnonymously() async {
-    try {
-      print('Main: Bắt đầu đăng nhập ẩn danh...');
-      final userCredential = await FirebaseService.signInAnonymously();
-      if (userCredential != null) {
-        print('Main: Đăng nhập ẩn danh thành công - User ID: ${userCredential.user?.uid}');
-      } else {
-        print('Main: Đăng nhập ẩn danh thất bại - userCredential là null');
-      }
-    } catch (e) {
-      print('Main: Lỗi khi đăng nhập ẩn danh: $e');
-    }
   }
 
   Future<void> _playBackgroundMusic() async {
