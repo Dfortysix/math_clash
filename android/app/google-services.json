@@ -12,7 +12,20 @@
           "package_name": "com.example.math_clash"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "197385241433-a40osp1vihl51cipd3fkq19l0n7nrpns.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.math_clash",
+            "certificate_hash": "7108dd7ca6bc0a66ba839e7e1938c7b3b1c0e4b2"
+          }
+        },
+        {
+          "client_id": "197385241433-ei02ns0i0k830njkv343o3i9d9qmti11.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyDzi70W4v-fZnHsY2yw_2EqMucKeEnAFkk"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "197385241433-ei02ns0i0k830njkv343o3i9d9qmti11.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }
