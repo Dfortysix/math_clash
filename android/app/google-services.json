@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "197385241433",
+    "project_id": "math-clash-app",
+    "storage_bucket": "math-clash-app.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:197385241433:android:a0b473419acb17c6240248",
+        "android_client_info": {
+          "package_name": "com.example.math_clash"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDzi70W4v-fZnHsY2yw_2EqMucKeEnAFkk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
