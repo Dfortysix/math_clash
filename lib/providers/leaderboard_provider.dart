@@ -59,8 +59,18 @@ class LeaderboardNotifier extends StateNotifier<LeaderboardState> {
         LeaderboardEntry.fromMap(map, map['id'] ?? '')
       ).toList();
 
+      // Lọc: chỉ giữ điểm cao nhất của mỗi userId
+      final Map<String, LeaderboardEntry> bestEntries = {};
+      for (final entry in entries) {
+        if (!bestEntries.containsKey(entry.userId) || entry.score > bestEntries[entry.userId]!.score) {
+          bestEntries[entry.userId] = entry;
+        }
+      }
+      final filteredEntries = bestEntries.values.toList();
+      filteredEntries.sort((a, b) => b.score.compareTo(a.score));
+
       state = state.copyWith(
-        entries: entries,
+        entries: filteredEntries,
         isLoading: false,
         selectedGameMode: mode,
       );

@@ -89,7 +89,7 @@ class FirebaseService {
         'userId': user.uid,
         'username': user.displayName ?? 'Unknown User',
         'email': user.email,
-        'photoUrl': user.photoURL,
+        'photoUrl': user.photoURL ?? '',
         'score': score,
         'gameMode': gameMode,
         'timestamp': FieldValue.serverTimestamp(),

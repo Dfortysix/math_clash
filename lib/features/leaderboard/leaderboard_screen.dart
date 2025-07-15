@@ -248,66 +248,64 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
       Colors.grey[400]!, // Silver
       Colors.brown, // Bronze
     ];
-
-    return Container(
-      margin: const EdgeInsets.only(bottom: 8),
-      decoration: BoxDecoration(
-        color: Colors.white,
+    return Card(
+      margin: const EdgeInsets.symmetric(vertical: 6),
+      elevation: isTop3 ? 6 : 2,
+      shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.circular(12),
-        boxShadow: [
-          BoxShadow(
-            color: Colors.black.withOpacity(0.1),
-            blurRadius: 4,
-            offset: const Offset(0, 2),
-          ),
-        ],
       ),
       child: ListTile(
-        leading: Container(
-          width: 40,
-          height: 40,
-          decoration: BoxDecoration(
-            color: isTop3 ? rankColors[rank - 1] : Colors.blue,
-            shape: BoxShape.circle,
-          ),
-          child: Center(
-            child: Text(
-              '$rank',
-              style: TextStyle(
-                color: isTop3 ? Colors.white : Colors.white,
-                fontWeight: FontWeight.bold,
-                fontSize: 16,
-              ),
+        leading: Stack(
+          alignment: Alignment.center,
+          children: [
+            CircleAvatar(
+              backgroundColor: isTop3 ? rankColors[rank - 1] : Colors.blue.shade100,
+              radius: 24,
+              child: entry.avatarUrl.isNotEmpty
+                  ? ClipOval(
+                      child: Image.network(
+                        entry.avatarUrl,
+                        width: 44,
+                        height: 44,
+                        fit: BoxFit.cover,
+                        errorBuilder: (context, error, stackTrace) => const Icon(Icons.person, size: 32),
+                      ),
+                    )
+                  : const Icon(Icons.person, size: 32, color: Colors.white),
             ),
-          ),
+            if (isTop3)
+              Positioned(
+                bottom: 0,
+                right: 0,
+                child: Container(
+                  padding: const EdgeInsets.all(4),
+                  decoration: BoxDecoration(
+                    color: Colors.white,
+                    shape: BoxShape.circle,
+                  ),
+                  child: Text(
+                    '$rank',
+                    style: TextStyle(
+                      color: rankColors[rank - 1],
+                      fontWeight: FontWeight.bold,
+                      fontSize: 14,
+                    ),
+                  ),
+                ),
+              ),
+          ],
         ),
         title: Text(
           entry.username,
-          style: const TextStyle(
-            fontWeight: FontWeight.bold,
-            fontSize: 16,
-          ),
+          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        subtitle: Text(
-          'Chơi lúc: ${_formatDate(entry.timestamp)}',
+        subtitle: Text('Điểm: ${entry.score}'),
+        trailing: Text(
+          '#$rank',
           style: TextStyle(
-            color: Colors.grey[600],
-            fontSize: 12,
-          ),
-        ),
-        trailing: Container(
-          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-          decoration: BoxDecoration(
-            color: Colors.blue,
-            borderRadius: BorderRadius.circular(20),
-          ),
-          child: Text(
-            '${entry.score}',
-            style: const TextStyle(
-              color: Colors.white,
-              fontWeight: FontWeight.bold,
-              fontSize: 16,
-            ),
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: isTop3 ? rankColors[rank - 1] : Colors.blue,
           ),
         ),
       ),
