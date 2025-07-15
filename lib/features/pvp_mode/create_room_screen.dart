@@ -17,7 +17,7 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
   @override
   void initState() {
     super.initState();
-    _createRoom();
+    Future.microtask(() => _createRoom());
   }
 
   Future<void> _createRoom() async {
@@ -49,6 +49,7 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    print('[PvP] Build CreateRoomScreen');
     final pvpRoomState = ref.watch(pvpRoomProvider);
     final room = pvpRoomState.room;
     return Scaffold(
