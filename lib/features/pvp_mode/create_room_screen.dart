@@ -23,17 +23,28 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
   Future<void> _createRoom() async {
     final authState = ref.read(authProvider);
     final user = authState.user;
-    if (user == null) return;
+    print('[PvP] User: $user');
+    if (user == null) {
+      print('[PvP] Không có user, cần đăng nhập Google!');
+      return;
+    }
     final questions = QuestionGenerator.generateRandomQuestions().map((q) => q.toMap()).toList();
-    final roomId = await ref.read(pvpRoomProvider.notifier).createRoom(
-      userId: user.uid,
-      displayName: user.displayName ?? 'Unknown',
-      avatarUrl: user.photoURL ?? '',
-      questions: questions,
-    );
-    setState(() {
-      _roomId = roomId;
-    });
+    print('[PvP] Questions: $questions');
+    try {
+      final roomId = await ref.read(pvpRoomProvider.notifier).createRoom(
+        userId: user.uid,
+        displayName: user.displayName ?? 'Unknown',
+        avatarUrl: user.photoURL ?? '',
+        questions: questions,
+      );
+      print('[PvP] RoomId: $roomId');
+      setState(() {
+        _roomId = roomId;
+      });
+    } catch (e, stack) {
+      print('[PvP] Lỗi khi tạo phòng: $e');
+      print(stack);
+    }
   }
 
   @override

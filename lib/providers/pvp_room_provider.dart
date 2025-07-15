@@ -73,6 +73,52 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     });
   }
 
+  Future<String?> joinRoom({
+    required String roomId,
+    required String userId,
+    required String displayName,
+    required String avatarUrl,
+  }) async {
+    state = state.copyWith(isLoading: true, error: null);
+    try {
+      final docRef = FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId);
+      final doc = await docRef.get();
+      if (!doc.exists) {
+        state = state.copyWith(isLoading: false, error: 'Phòng không tồn tại!');
+        return null;
+      }
+      final data = doc.data()!;
+      final players = (data['players'] as List<dynamic>? ?? []);
+      if (players.length >= 2) {
+        state = state.copyWith(isLoading: false, error: 'Phòng đã đủ người!');
+        return null;
+      }
+      // Kiểm tra nếu user đã có trong phòng
+      final alreadyInRoom = players.any((p) => p['userId'] == userId);
+      if (alreadyInRoom) {
+        listenRoom(roomId);
+        return roomId;
+      }
+      // Thêm user vào danh sách players
+      players.add({
+        'userId': userId,
+        'displayName': displayName,
+        'avatarUrl': avatarUrl,
+        'score': 0,
+        'ready': false,
+      });
+      await docRef.update({
+        'players': players,
+        'updatedAt': FieldValue.serverTimestamp(),
+      });
+      listenRoom(roomId);
+      return roomId;
+    } catch (e) {
+      state = state.copyWith(isLoading: false, error: e.toString());
+      return null;
+    }
+  }
+
   @override
   void dispose() {
     _roomSub?.cancel();
