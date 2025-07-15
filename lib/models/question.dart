@@ -12,4 +12,14 @@ class Question {
     required this.correctAnswer,
     required this.difficulty,
   });
+
+  Map<String, dynamic> toMap() {
+    return {
+      'id': id,
+      'content': content,
+      'options': options,
+      'correctAnswer': correctAnswer,
+      'difficulty': difficulty,
+    };
+  }
 } 

@@ -171,4 +171,31 @@ class FirebaseService {
       return null;
     }
   }
+
+  // ================= PvP ROOM =================
+  static Future<String> createPvPRoom({
+    required String userId,
+    required String displayName,
+    required String avatarUrl,
+    required List<Map<String, dynamic>> questions,
+  }) async {
+    final now = DateTime.now();
+    final roomData = {
+      'status': 'waiting',
+      'players': [
+        {
+          'userId': userId,
+          'displayName': displayName,
+          'avatarUrl': avatarUrl,
+          'score': 0,
+          'ready': false,
+        }
+      ],
+      'questions': questions,
+      'createdAt': Timestamp.fromDate(now),
+      'updatedAt': Timestamp.fromDate(now),
+    };
+    final docRef = await _firestore.collection('pvp_rooms').add(roomData);
+    return docRef.id;
+  }
 }

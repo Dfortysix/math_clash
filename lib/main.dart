@@ -7,6 +7,7 @@ import 'services/google_play_games_service.dart';
 import 'providers/auth_provider.dart';
 import 'features/solo_mode/solo_mode_screen.dart';
 import 'features/leaderboard/leaderboard_screen.dart';
+import 'features/pvp_mode/create_room_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -185,6 +186,38 @@ class HomeScreen extends ConsumerWidget {
                   ),
                 ),
                 const SizedBox(height: 20),
+                // Hai nút PvP Mode dạng dọc, ngay sau Solo Mode
+                ElevatedButton.icon(
+                  icon: Icon(Icons.meeting_room),
+                  label: Text('Tạo phòng PvP', style: TextStyle(fontSize: 20)),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const CreateRoomScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.flash_on),
+                  label: Text('Ghép trực tuyến', style: TextStyle(fontSize: 20)),
+                  onPressed: () {
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      SnackBar(content: Text('Chức năng đang phát triển!')),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.purple,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                // Nút Bảng Xếp Hạng
                 ElevatedButton(
                   onPressed: () {
                     Navigator.pushNamed(context, '/leaderboard');
@@ -199,8 +232,8 @@ class HomeScreen extends ConsumerWidget {
                     style: TextStyle(fontSize: 20),
                   ),
                 ),
-                const SizedBox(height: 20),
                 
+                const SizedBox(height: 20),
                 // Nút đăng nhập/đăng xuất Google
                 if (authState.isGoogleSignedIn)
                   ElevatedButton(
@@ -244,22 +277,6 @@ class HomeScreen extends ConsumerWidget {
                             style: TextStyle(fontSize: 20),
                           ),
                   ),
-                
-                const SizedBox(height: 20),
-                ElevatedButton(
-                  onPressed: () {
-                    // TODO: Navigate to PvP Mode
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                  child: const Text(
-                    'PvP Mode',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
               ],
             ),
           ),
