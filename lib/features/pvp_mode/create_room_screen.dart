@@ -14,6 +14,7 @@ class CreateRoomScreen extends ConsumerStatefulWidget {
 
 class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
   String? _roomId;
+  bool _navigated = false;
 
   @override
   void initState() {
@@ -54,8 +55,9 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
     final pvpRoomState = ref.watch(pvpRoomProvider);
     final room = pvpRoomState.room;
     
-    // Nếu đã có phòng, chuyển sang màn hình phòng
-    if (room != null) {
+    // Nếu đã có phòng, chuyển sang màn hình phòng (chỉ 1 lần)
+    if (room != null && !_navigated) {
+      _navigated = true;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         Navigator.of(context).pushReplacement(
           MaterialPageRoute(builder: (context) => PvPRoomScreen(roomId: room.roomId)),

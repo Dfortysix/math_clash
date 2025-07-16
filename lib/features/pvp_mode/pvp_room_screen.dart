@@ -42,6 +42,7 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
         title: Text('Phòng ${room.roomId}'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
+        automaticallyImplyLeading: false, // Ẩn nút back
         actions: [
           IconButton(
             icon: const Icon(Icons.exit_to_app),
