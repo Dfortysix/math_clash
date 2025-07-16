@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/pvp_room_provider.dart';
 import '../../providers/auth_provider.dart';
+import 'pvp_room_screen.dart';
 
 class JoinRoomScreen extends ConsumerStatefulWidget {
   const JoinRoomScreen({super.key});
@@ -51,7 +52,9 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
     );
     if (result != null) {
       // Thành công, chuyển sang màn hình phòng
-      Navigator.of(context).pop(); // Đóng màn nhập mã
+      Navigator.of(context).pushReplacement(
+        MaterialPageRoute(builder: (context) => PvPRoomScreen(roomId: result)),
+      );
     } else {
       setState(() {
         _errorText = ref.read(pvpRoomProvider).error ?? 'Không thể tham gia phòng';
@@ -62,11 +65,20 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final pvpRoomState = ref.watch(pvpRoomProvider);
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tham gia phòng PvP'),
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
+        actions: [
+          if (pvpRoomState.room != null)
+            IconButton(
+              icon: const Icon(Icons.exit_to_app),
+              onPressed: () => _showLeaveRoomDialog(context),
+              tooltip: 'Rời phòng',
+            ),
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(32),
@@ -112,6 +124,34 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
             ),
           ],
         ),
+      ),
+    );
+  }
+
+  void _showLeaveRoomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Rời phòng'),
+        content: const Text('Bạn có chắc muốn rời phòng?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Hủy'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              final authState = ref.read(authProvider);
+              final user = authState.user;
+              if (user != null) {
+                await ref.read(pvpRoomProvider.notifier).leaveRoom(user.uid);
+                Navigator.of(context).pop(); // Quay về màn hình chính
+              }
+            },
+            child: const Text('Rời phòng'),
+          ),
+        ],
       ),
     );
   }

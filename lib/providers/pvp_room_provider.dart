@@ -119,6 +119,23 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     }
   }
 
+  // Rời phòng
+  Future<bool> leaveRoom(String userId) async {
+    if (state.room == null) return false;
+    
+    try {
+      final success = await FirebaseService.leaveRoom(state.room!.roomId, userId);
+      if (success) {
+        _roomSub?.cancel();
+        state = PvPRoomState(); // Reset state
+      }
+      return success;
+    } catch (e) {
+      state = state.copyWith(error: e.toString());
+      return false;
+    }
+  }
+
   @override
   void dispose() {
     _roomSub?.cancel();

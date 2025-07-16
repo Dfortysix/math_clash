@@ -194,8 +194,61 @@ class FirebaseService {
       'questions': questions,
       'createdAt': Timestamp.fromDate(now),
       'updatedAt': Timestamp.fromDate(now),
+      'expiresAt': Timestamp.fromDate(now.add(const Duration(hours: 2))), // Tự động xóa sau 2 giờ
     };
     final docRef = await _firestore.collection('pvp_rooms').add(roomData);
     return docRef.id;
+  }
+
+  // Xử lý người chơi rời phòng
+  static Future<bool> leaveRoom(String roomId, String userId) async {
+    try {
+      final docRef = _firestore.collection('pvp_rooms').doc(roomId);
+      final doc = await docRef.get();
+      if (!doc.exists) return false;
+      
+      final data = doc.data()!;
+      final players = List<Map<String, dynamic>>.from(data['players'] ?? []);
+      
+      // Xóa người chơi khỏi danh sách
+      players.removeWhere((player) => player['userId'] == userId);
+      
+      if (players.isEmpty) {
+        // Nếu không còn ai, xóa phòng
+        await docRef.delete();
+        return true;
+      } else {
+        // Cập nhật danh sách người chơi và thời gian
+        await docRef.update({
+          'players': players,
+          'updatedAt': FieldValue.serverTimestamp(),
+          'expiresAt': Timestamp.fromDate(DateTime.now().add(const Duration(hours: 2))),
+        });
+        return true;
+      }
+    } catch (e) {
+      print('FirebaseService: Lỗi khi rời phòng: $e');
+      return false;
+    }
+  }
+
+  // Xóa phòng cũ (để gọi từ Cloud Function hoặc cron job)
+  static Future<void> deleteExpiredRooms() async {
+    try {
+      final now = Timestamp.fromDate(DateTime.now());
+      final querySnapshot = await _firestore
+          .collection('pvp_rooms')
+          .where('expiresAt', isLessThan: now)
+          .get();
+      
+      final batch = _firestore.batch();
+      for (final doc in querySnapshot.docs) {
+        batch.delete(doc.reference);
+      }
+      await batch.commit();
+      print('FirebaseService: Đã xóa ${querySnapshot.docs.length} phòng hết hạn');
+    } catch (e) {
+      print('FirebaseService: Lỗi khi xóa phòng hết hạn: $e');
+    }
   }
 }

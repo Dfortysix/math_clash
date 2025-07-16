@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/pvp_room_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/question_generator.dart';
+import 'pvp_room_screen.dart'; // Added import for PvPRoomScreen
 
 class CreateRoomScreen extends ConsumerStatefulWidget {
   const CreateRoomScreen({super.key});
@@ -52,57 +53,60 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
     print('[PvP] Build CreateRoomScreen');
     final pvpRoomState = ref.watch(pvpRoomProvider);
     final room = pvpRoomState.room;
+    
+    // Nếu đã có phòng, chuyển sang màn hình phòng
+    if (room != null) {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => PvPRoomScreen(roomId: room.roomId)),
+        );
+      });
+    }
+    
     return Scaffold(
       appBar: AppBar(
         title: const Text('Tạo phòng PvP'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
-      body: room == null
-          ? const Center(child: CircularProgressIndicator())
-          : Padding(
-              padding: const EdgeInsets.all(24),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  const Text(
-                    'Chia sẻ mã phòng cho bạn bè',
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                  ),
-                  const SizedBox(height: 16),
-                  SelectableText(
-                    room.roomId,
-                    style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold, color: Colors.blue),
-                  ),
-                  const SizedBox(height: 32),
-                  const Text('Đang chờ đối thủ vào phòng...', style: TextStyle(fontSize: 18)),
-                  const SizedBox(height: 32),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: room.players.map((player) => Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      child: Column(
-                        children: [
-                          CircleAvatar(
-                            backgroundImage: player.avatarUrl.isNotEmpty ? NetworkImage(player.avatarUrl) : null,
-                            radius: 32,
-                            child: player.avatarUrl.isEmpty ? const Icon(Icons.person, size: 32) : null,
-                          ),
-                          const SizedBox(height: 8),
-                          Text(player.displayName, style: const TextStyle(fontWeight: FontWeight.bold)),
-                        ],
-                      ),
-                    )).toList(),
-                  ),
-                  const SizedBox(height: 32),
-                  if (room.players.length < 2)
-                    const CircularProgressIndicator()
-                  else
-                    const Text('Đã đủ người, chuẩn bị bắt đầu!', style: TextStyle(color: Colors.green, fontSize: 18)),
-                ],
-              ),
-            ),
+      body: const Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircularProgressIndicator(),
+            SizedBox(height: 20),
+            Text('Đang tạo phòng...'),
+          ],
+        ),
+      ),
+    );
+  }
+
+  void _showLeaveRoomDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        title: const Text('Rời phòng'),
+        content: const Text('Bạn có chắc muốn rời phòng?'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.of(context).pop(),
+            child: const Text('Hủy'),
+          ),
+          TextButton(
+            onPressed: () async {
+              Navigator.of(context).pop();
+              final authState = ref.read(authProvider);
+              final user = authState.user;
+              if (user != null) {
+                await ref.read(pvpRoomProvider.notifier).leaveRoom(user.uid);
+                Navigator.of(context).pop(); // Quay về màn hình chính
+              }
+            },
+            child: const Text('Rời phòng'),
+          ),
+        ],
+      ),
     );
   }
 } 
