@@ -291,25 +291,40 @@ class HomeScreen extends ConsumerWidget {
                             ),
                     )
                   else
-                    ElevatedButton(
-                      onPressed: authState.isLoading ? null : () async {
-                        await ref.read(authProvider.notifier).signInWithGoogle();
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: Colors.green,
-                        foregroundColor: Colors.white,
-                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                    SizedBox(
+                      width: double.infinity,
+                      child: ElevatedButton(
+                        onPressed: authState.isLoading ? null : () async {
+                          final scaffoldMessenger = ScaffoldMessenger.of(context);
+                          try {
+                            await ref.read(authProvider.notifier).signInWithGoogle().timeout(
+                              const Duration(seconds: 30),
+                              onTimeout: () {
+                                throw Exception('Đăng nhập Google quá lâu, vui lòng thử lại!');
+                              },
+                            );
+                          } catch (e) {
+                            scaffoldMessenger.showSnackBar(
+                              SnackBar(content: Text(e.toString(), style: const TextStyle(fontSize: 16))),
+                            );
+                          }
+                        },
+                        style: ElevatedButton.styleFrom(
+                          backgroundColor: Colors.green,
+                          foregroundColor: Colors.white,
+                          padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                        ),
+                        child: authState.isLoading
+                            ? const SizedBox(
+                                width: 20,
+                                height: 20,
+                                child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                              )
+                            : const Text(
+                                'Đăng nhập Google',
+                                style: TextStyle(fontSize: 20),
+                              ),
                       ),
-                      child: authState.isLoading
-                          ? const SizedBox(
-                              width: 20,
-                              height: 20,
-                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                            )
-                          : const Text(
-                              'Đăng nhập Google',
-                              style: TextStyle(fontSize: 20),
-                            ),
                     ),
                 ],
               ),
