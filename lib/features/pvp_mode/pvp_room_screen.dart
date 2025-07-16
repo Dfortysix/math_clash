@@ -64,57 +64,57 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
         ),
         child: Padding(
           padding: const EdgeInsets.all(20),
-          child: Column(
-            children: [
-              // Thông tin phòng
-              Card(
-                child: Padding(
-                  padding: const EdgeInsets.all(16),
-                  child: Column(
-                    children: [
-                      Text(
-                        'Mã phòng: ${room.roomId}',
-                        style: const TextStyle(
-                          fontSize: 24,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.blue,
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          _buildStatusChip(room.status),
-                          const SizedBox(width: 12),
-                          IconButton(
-                            icon: const Icon(Icons.copy, color: Colors.blue),
-                            onPressed: () {
-                              Clipboard.setData(ClipboardData(text: room.roomId));
-                              ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Đã sao chép mã phòng!'),
-                                  duration: Duration(seconds: 2),
-                                ),
-                              );
-                            },
-                            tooltip: 'Sao chép mã phòng',
+          child: SingleChildScrollView(
+            child: Column(
+              children: [
+                // Thông tin phòng
+                Card(
+                  child: Padding(
+                    padding: const EdgeInsets.all(16),
+                    child: Column(
+                      children: [
+                        Text(
+                          'Mã phòng: ${room.roomId}',
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                            color: Colors.blue,
                           ),
-                        ],
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        'Người chơi: ${room.players.length}/2',
-                        style: const TextStyle(fontSize: 16),
-                      ),
-                    ],
+                          textAlign: TextAlign.center,
+                        ),
+                        const SizedBox(height: 8),
+                        Column(
+                          children: [
+                            _buildStatusChip(room.status),
+                            const SizedBox(height: 8),
+                            IconButton(
+                              icon: const Icon(Icons.copy, color: Colors.blue),
+                              onPressed: () {
+                                Clipboard.setData(ClipboardData(text: room.roomId));
+                                ScaffoldMessenger.of(context).showSnackBar(
+                                  const SnackBar(
+                                    content: Text('Đã sao chép mã phòng!'),
+                                    duration: Duration(seconds: 2),
+                                  ),
+                                );
+                              },
+                              tooltip: 'Sao chép mã phòng',
+                            ),
+                          ],
+                        ),
+                        const SizedBox(height: 8),
+                        Text(
+                          'Người chơi: ${room.players.length}/2',
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-              const SizedBox(height: 20),
+                const SizedBox(height: 20),
 
-              // Danh sách người chơi
-              Expanded(
-                child: Card(
+                // Danh sách người chơi
+                Card(
                   child: Padding(
                     padding: const EdgeInsets.all(16),
                     child: Column(
@@ -128,7 +128,8 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                           ),
                         ),
                         const SizedBox(height: 16),
-                        Expanded(
+                        SizedBox(
+                          height: 200, // Giới hạn chiều cao
                           child: ListView.builder(
                             itemCount: room.players.length,
                             itemBuilder: (context, index) {
@@ -147,9 +148,12 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                                   ),
                                   title: Row(
                                     children: [
-                                      Text(
-                                        player.displayName,
-                                        style: const TextStyle(fontWeight: FontWeight.bold),
+                                      Expanded(
+                                        child: Text(
+                                          player.displayName,
+                                          style: const TextStyle(fontWeight: FontWeight.bold),
+                                          overflow: TextOverflow.ellipsis,
+                                        ),
                                       ),
                                       if (index == 0) ...[
                                         const SizedBox(width: 8),
@@ -202,45 +206,45 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                     ),
                   ),
                 ),
-              ),
 
-              // Nút bắt đầu game
-              if (canStartGame) ...[
-                const SizedBox(height: 20),
-                SizedBox(
-                  width: double.infinity,
-                  child: ElevatedButton.icon(
-                    icon: const Icon(Icons.play_arrow),
-                    label: const Text('Bắt đầu game', style: TextStyle(fontSize: 18)),
-                    onPressed: () {
-                      // TODO: Chuyển sang màn hình chơi PvP
-                      ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(content: Text('Chức năng đang phát triển!')),
-                      );
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(vertical: 16),
+                // Nút bắt đầu game
+                if (canStartGame) ...[
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: const Icon(Icons.play_arrow),
+                      label: const Text('Bắt đầu game', style: TextStyle(fontSize: 18)),
+                      onPressed: () {
+                        // TODO: Chuyển sang màn hình chơi PvP
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          const SnackBar(content: Text('Chức năng đang phát triển!')),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(vertical: 16),
+                      ),
                     ),
                   ),
-                ),
-              ] else if (room.players.length < 2) ...[
-                const SizedBox(height: 20),
-                const Card(
-                  child: Padding(
-                    padding: EdgeInsets.all(16),
-                    child: Row(
-                      children: [
-                        CircularProgressIndicator(),
-                        SizedBox(width: 16),
-                        Text('Đang chờ người chơi khác...'),
-                      ],
+                ] else if (room.players.length < 2) ...[
+                  const SizedBox(height: 20),
+                  const Card(
+                    child: Padding(
+                      padding: EdgeInsets.all(16),
+                      child: Row(
+                        children: [
+                          CircularProgressIndicator(),
+                          SizedBox(width: 16),
+                          Text('Đang chờ người chơi khác...'),
+                        ],
+                      ),
                     ),
                   ),
-                ),
+                ],
               ],
-            ],
+            ),
           ),
         ),
       ),
