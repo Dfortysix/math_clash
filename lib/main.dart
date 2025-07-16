@@ -135,173 +135,184 @@ class HomeScreen extends ConsumerWidget {
             color: Colors.white.withOpacity(0.15),
           ),
           Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                const Text(
-                  'Math Clash',
-                  style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.blue),
-                ),
-                const SizedBox(height: 40),
-                
-                // Hiển thị thông tin user nếu đã đăng nhập
-                if (authState.isGoogleSignedIn) ...[
-                  Container(
-                    padding: const EdgeInsets.all(16),
-                    decoration: BoxDecoration(
-                      color: Colors.white.withOpacity(0.9),
-                      borderRadius: BorderRadius.circular(10),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        if (authState.user?.photoURL != null)
-                          CircleAvatar(
-                            backgroundImage: NetworkImage(authState.user!.photoURL!),
-                            radius: 20,
+            child: Container(
+              width: 300,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Text(
+                    'Math Clash',
+                    style: TextStyle(fontSize: 48, fontWeight: FontWeight.bold, color: Colors.blue),
+                  ),
+                  const SizedBox(height: 40),
+                  
+                  // Hiển thị thông tin user nếu đã đăng nhập
+                  if (authState.isGoogleSignedIn) ...[
+                    Container(
+                      padding: const EdgeInsets.all(16),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withOpacity(0.9),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (authState.user?.photoURL != null)
+                            CircleAvatar(
+                              backgroundImage: NetworkImage(authState.user!.photoURL!),
+                              radius: 20,
+                            ),
+                          const SizedBox(width: 12),
+                          Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                authState.user?.displayName ?? 'User',
+                                style: const TextStyle(fontWeight: FontWeight.bold),
+                              ),
+                              Text(
+                                authState.user?.email ?? '',
+                                style: const TextStyle(fontSize: 12, color: Colors.grey),
+                              ),
+                            ],
                           ),
-                        const SizedBox(width: 12),
-                        Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              authState.user?.displayName ?? 'User',
-                              style: const TextStyle(fontWeight: FontWeight.bold),
-                            ),
-                            Text(
-                              authState.user?.email ?? '',
-                              style: const TextStyle(fontSize: 12, color: Colors.grey),
-                            ),
-                          ],
-                        ),
-                      ],
+                        ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                  ],
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: Icon(Icons.person),
+                      label: Text('Solo Mode', style: TextStyle(fontSize: 20)),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/solo');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.blue,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
                     ),
                   ),
                   const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: Icon(Icons.meeting_room),
+                      label: Text('Tạo phòng PvP', style: TextStyle(fontSize: 20)),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const CreateRoomScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: Icon(Icons.input),
+                      label: Text('Tham gia phòng PvP', style: TextStyle(fontSize: 20)),
+                      onPressed: () {
+                        Navigator.of(context).push(
+                          MaterialPageRoute(builder: (context) => const JoinRoomScreen()),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.teal,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: Icon(Icons.flash_on),
+                      label: Text('Ghép trực tuyến', style: TextStyle(fontSize: 20)),
+                      onPressed: () {
+                        ScaffoldMessenger.of(context).showSnackBar(
+                          SnackBar(content: Text('Chức năng đang phát triển!')),
+                        );
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.purple,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 20),
+                  SizedBox(
+                    width: double.infinity,
+                    child: ElevatedButton.icon(
+                      icon: Icon(Icons.leaderboard),
+                      label: Text('Bảng Xếp Hạng', style: TextStyle(fontSize: 20)),
+                      onPressed: () {
+                        Navigator.pushNamed(context, '/leaderboard');
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.orange,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                    ),
+                  ),
+                  
+                  const SizedBox(height: 20),
+                  // Nút đăng nhập/đăng xuất Google
+                  if (authState.isGoogleSignedIn)
+                    ElevatedButton(
+                      onPressed: authState.isLoading ? null : () async {
+                        await ref.read(authProvider.notifier).signOut();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.red,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                      child: authState.isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            )
+                          : const Text(
+                              'Đăng xuất Google',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                    )
+                  else
+                    ElevatedButton(
+                      onPressed: authState.isLoading ? null : () async {
+                        await ref.read(authProvider.notifier).signInWithGoogle();
+                      },
+                      style: ElevatedButton.styleFrom(
+                        backgroundColor: Colors.green,
+                        foregroundColor: Colors.white,
+                        padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                      ),
+                      child: authState.isLoading
+                          ? const SizedBox(
+                              width: 20,
+                              height: 20,
+                              child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
+                            )
+                          : const Text(
+                              'Đăng nhập Google',
+                              style: TextStyle(fontSize: 20),
+                            ),
+                    ),
                 ],
-                
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/solo');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.blue,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                  child: const Text(
-                    'Solo Mode',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Hai nút PvP Mode dạng dọc, ngay sau Solo Mode
-                ElevatedButton.icon(
-                  icon: Icon(Icons.meeting_room),
-                  label: Text('Tạo phòng PvP', style: TextStyle(fontSize: 20)),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const CreateRoomScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.green,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  icon: Icon(Icons.input),
-                  label: Text('Tham gia phòng PvP', style: TextStyle(fontSize: 20)),
-                  onPressed: () {
-                    Navigator.of(context).push(
-                      MaterialPageRoute(builder: (context) => const JoinRoomScreen()),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                ElevatedButton.icon(
-                  icon: Icon(Icons.flash_on),
-                  label: Text('Ghép trực tuyến', style: TextStyle(fontSize: 20)),
-                  onPressed: () {
-                    ScaffoldMessenger.of(context).showSnackBar(
-                      SnackBar(content: Text('Chức năng đang phát triển!')),
-                    );
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.purple,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                ),
-                const SizedBox(height: 20),
-                // Nút Bảng Xếp Hạng
-                ElevatedButton(
-                  onPressed: () {
-                    Navigator.pushNamed(context, '/leaderboard');
-                  },
-                  style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.orange,
-                    foregroundColor: Colors.white,
-                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                  ),
-                  child: const Text(
-                    'Bảng Xếp Hạng',
-                    style: TextStyle(fontSize: 20),
-                  ),
-                ),
-                
-                const SizedBox(height: 20),
-                // Nút đăng nhập/đăng xuất Google
-                if (authState.isGoogleSignedIn)
-                  ElevatedButton(
-                    onPressed: authState.isLoading ? null : () async {
-                      await ref.read(authProvider.notifier).signOut();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.red,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    ),
-                    child: authState.isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                          )
-                        : const Text(
-                            'Đăng xuất Google',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                  )
-                else
-                  ElevatedButton(
-                    onPressed: authState.isLoading ? null : () async {
-                      await ref.read(authProvider.notifier).signInWithGoogle();
-                    },
-                    style: ElevatedButton.styleFrom(
-                      backgroundColor: Colors.green,
-                      foregroundColor: Colors.white,
-                      padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
-                    ),
-                    child: authState.isLoading
-                        ? const SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
-                          )
-                        : const Text(
-                            'Đăng nhập Google',
-                            style: TextStyle(fontSize: 20),
-                          ),
-                  ),
-              ],
+              ),
             ),
           ),
         ],
