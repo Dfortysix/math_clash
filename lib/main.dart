@@ -8,6 +8,7 @@ import 'providers/auth_provider.dart';
 import 'features/solo_mode/solo_mode_screen.dart';
 import 'features/leaderboard/leaderboard_screen.dart';
 import 'features/pvp_mode/create_room_screen.dart';
+import 'features/pvp_mode/join_room_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -197,6 +198,21 @@ class HomeScreen extends ConsumerWidget {
                   },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.green,
+                    foregroundColor: Colors.white,
+                    padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
+                  ),
+                ),
+                const SizedBox(height: 20),
+                ElevatedButton.icon(
+                  icon: Icon(Icons.input),
+                  label: Text('Tham gia phòng PvP', style: TextStyle(fontSize: 20)),
+                  onPressed: () {
+                    Navigator.of(context).push(
+                      MaterialPageRoute(builder: (context) => const JoinRoomScreen()),
+                    );
+                  },
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: Colors.teal,
                     foregroundColor: Colors.white,
                     padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   ),
