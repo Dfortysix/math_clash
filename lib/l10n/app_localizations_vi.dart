@@ -155,4 +155,31 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get savingScore => 'Đang lưu điểm...';
+
+  @override
+  String get you => 'Bạn';
+
+  @override
+  String get waiting => 'Chờ người chơi';
+
+  @override
+  String get playing => 'Đang chơi';
+
+  @override
+  String get finished => 'Đã kết thúc';
+
+  @override
+  String get unknown => 'Không xác định';
+
+  @override
+  String get leaveRoomConfirm => 'Bạn có chắc muốn rời phòng?';
+
+  @override
+  String get cancel => 'Hủy';
+
+  @override
+  String get leavingRoom => 'Đang rời phòng...';
+
+  @override
+  String get leaveRoomError => 'Có lỗi xảy ra khi rời phòng';
 }

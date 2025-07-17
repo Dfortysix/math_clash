@@ -382,6 +382,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Saving score...'**
   String get savingScore;
+
+  /// No description provided for @you.
+  ///
+  /// In en, this message translates to:
+  /// **'You'**
+  String get you;
+
+  /// No description provided for @waiting.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting'**
+  String get waiting;
+
+  /// No description provided for @playing.
+  ///
+  /// In en, this message translates to:
+  /// **'Playing'**
+  String get playing;
+
+  /// No description provided for @finished.
+  ///
+  /// In en, this message translates to:
+  /// **'Finished'**
+  String get finished;
+
+  /// No description provided for @unknown.
+  ///
+  /// In en, this message translates to:
+  /// **'Unknown'**
+  String get unknown;
+
+  /// No description provided for @leaveRoomConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Are you sure you want to leave the room?'**
+  String get leaveRoomConfirm;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @leavingRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Leaving room...'**
+  String get leavingRoom;
+
+  /// No description provided for @leaveRoomError.
+  ///
+  /// In en, this message translates to:
+  /// **'An error occurred while leaving the room'**
+  String get leaveRoomError;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

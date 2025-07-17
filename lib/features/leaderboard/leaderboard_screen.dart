@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/leaderboard_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/leaderboard_entry.dart';
+import '../../l10n/app_localizations.dart';
 
 class LeaderboardScreen extends ConsumerStatefulWidget {
   const LeaderboardScreen({super.key});
@@ -27,8 +28,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Bảng Xếp Hạng'),
-        backgroundColor: Colors.blue,
+        title: Text(AppLocalizations.of(context)!.leaderboard),
+        backgroundColor: Colors.orange,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
@@ -135,7 +136,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Chưa đăng nhập Google',
+                            AppLocalizations.of(context)!.notSignedIn,
                             style: TextStyle(
                               fontWeight: FontWeight.bold,
                               fontSize: 16,
@@ -143,7 +144,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                             ),
                           ),
                           Text(
-                            'Đăng nhập Google để lưu điểm vào bảng xếp hạng',
+                            AppLocalizations.of(context)!.signInToSaveLeaderboard,
                             style: TextStyle(
                               fontSize: 14,
                               color: Colors.orange.shade600,
@@ -163,8 +164,8 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                  _buildModeButton('Solo Mode', 'solo', leaderboardState.selectedGameMode),
-                  _buildModeButton('PvP Mode', 'pvp', leaderboardState.selectedGameMode),
+                  _buildModeButton(AppLocalizations.of(context)!.soloMode, 'solo', leaderboardState.selectedGameMode),
+                  _buildModeButton(AppLocalizations.of(context)!.pvpMode, 'pvp', leaderboardState.selectedGameMode),
                 ],
               ),
             ),
@@ -181,7 +182,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                               const Icon(Icons.error, size: 64, color: Colors.red),
                               const SizedBox(height: 16),
                               Text(
-                                'Lỗi: ${leaderboardState.error}',
+                                '${AppLocalizations.of(context)!.error}: ${leaderboardState.error}',
                                 textAlign: TextAlign.center,
                                 style: const TextStyle(fontSize: 16),
                               ),
@@ -190,21 +191,21 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                                 onPressed: () {
                                   ref.read(leaderboardProvider.notifier).loadLeaderboard();
                                 },
-                                child: const Text('Thử lại'),
+                                child: Text(AppLocalizations.of(context)!.tryAgain),
                               ),
                             ],
                           ),
                         )
                       : leaderboardState.entries.isEmpty
-                          ? const Center(
+                          ? Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  Icon(Icons.emoji_events, size: 64, color: Colors.orange),
-                                  SizedBox(height: 16),
+                                  const Icon(Icons.emoji_events, size: 64, color: Colors.orange),
+                                  const SizedBox(height: 16),
                                   Text(
-                                    'Chưa có dữ liệu xếp hạng',
-                                    style: TextStyle(fontSize: 18),
+                                    AppLocalizations.of(context)!.noLeaderboardData,
+                                    style: const TextStyle(fontSize: 18),
                                   ),
                                 ],
                               ),
@@ -299,7 +300,7 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
           entry.username,
           style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 18),
         ),
-        subtitle: Text('Điểm: ${entry.score}'),
+        subtitle: Text('${AppLocalizations.of(context)!.score}: ${entry.score}'),
         trailing: Text(
           '#$rank',
           style: TextStyle(

@@ -155,4 +155,31 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get savingScore => 'Saving score...';
+
+  @override
+  String get you => 'You';
+
+  @override
+  String get waiting => 'Waiting';
+
+  @override
+  String get playing => 'Playing';
+
+  @override
+  String get finished => 'Finished';
+
+  @override
+  String get unknown => 'Unknown';
+
+  @override
+  String get leaveRoomConfirm => 'Are you sure you want to leave the room?';
+
+  @override
+  String get cancel => 'Cancel';
+
+  @override
+  String get leavingRoom => 'Leaving room...';
+
+  @override
+  String get leaveRoomError => 'An error occurred while leaving the room';
 }

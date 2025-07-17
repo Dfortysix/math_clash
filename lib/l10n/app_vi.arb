@@ -46,5 +46,14 @@
   "appDescription": "Math Clash - Trò chơi toán học vui nhộn!",
   "languageChanged": "Đã đổi ngôn ngữ!",
   "join": "Tham gia",
-  "savingScore": "Đang lưu điểm..."
+  "savingScore": "Đang lưu điểm...",
+  "you": "Bạn",
+  "waiting": "Chờ người chơi",
+  "playing": "Đang chơi",
+  "finished": "Đã kết thúc",
+  "unknown": "Không xác định",
+  "leaveRoomConfirm": "Bạn có chắc muốn rời phòng?",
+  "cancel": "Hủy",
+  "leavingRoom": "Đang rời phòng...",
+  "leaveRoomError": "Có lỗi xảy ra khi rời phòng"
 } 

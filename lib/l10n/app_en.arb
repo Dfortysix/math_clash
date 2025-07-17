@@ -46,5 +46,14 @@
   "appDescription": "Math Clash - A fun math game!",
   "languageChanged": "Language changed!",
   "join": "Join",
-  "savingScore": "Saving score..."
+  "savingScore": "Saving score...",
+  "you": "You",
+  "waiting": "Waiting",
+  "playing": "Playing",
+  "finished": "Finished",
+  "unknown": "Unknown",
+  "leaveRoomConfirm": "Are you sure you want to leave the room?",
+  "cancel": "Cancel",
+  "leavingRoom": "Leaving room...",
+  "leaveRoomError": "An error occurred while leaving the room"
 } 

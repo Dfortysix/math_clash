@@ -4,6 +4,7 @@ import '../../providers/pvp_room_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../services/question_generator.dart';
 import 'pvp_room_screen.dart'; // Added import for PvPRoomScreen
+import '../../l10n/app_localizations.dart';
 
 class CreateRoomScreen extends ConsumerStatefulWidget {
   const CreateRoomScreen({super.key});
@@ -67,8 +68,8 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tạo phòng PvP'),
-        backgroundColor: Colors.blue,
+        title: Text(AppLocalizations.of(context)!.createPvpRoom),
+        backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
       body: const Center(

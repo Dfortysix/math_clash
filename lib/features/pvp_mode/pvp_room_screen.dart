@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/pvp_room_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/pvp_room.dart';
+import '../../l10n/app_localizations.dart';
 
 class PvPRoomScreen extends ConsumerStatefulWidget {
   final String roomId;
@@ -39,8 +40,8 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('Phòng ${room.roomId}'),
-        backgroundColor: Colors.blue,
+        title: Text(AppLocalizations.of(context)!.pvpMode),
+        backgroundColor: Colors.green,
         foregroundColor: Colors.white,
         automaticallyImplyLeading: false, // Ẩn nút back
         actions: [
@@ -75,7 +76,7 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                     child: Column(
                       children: [
                         Text(
-                          'Mã phòng: ${room.roomId}',
+                          '${AppLocalizations.of(context)!.roomCode}: ${room.roomId}',
                           style: const TextStyle(
                             fontSize: 20,
                             fontWeight: FontWeight.bold,
@@ -93,13 +94,13 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                               onPressed: () {
                                 Clipboard.setData(ClipboardData(text: room.roomId));
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Đã sao chép mã phòng!'),
-                                    duration: Duration(seconds: 2),
+                                  SnackBar(
+                                    content: Text(AppLocalizations.of(context)!.roomCodeCopied),
+                                    duration: const Duration(seconds: 2),
                                   ),
                                 );
                               },
-                              tooltip: 'Sao chép mã phòng',
+                              tooltip: AppLocalizations.of(context)!.copyRoomCode,
                             ),
                           ],
                         ),
@@ -182,9 +183,9 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                                             color: Colors.green,
                                             borderRadius: BorderRadius.circular(12),
                                           ),
-                                          child: const Text(
-                                            'Bạn',
-                                            style: TextStyle(
+                                          child: Text(
+                                            AppLocalizations.of(context)!.you,
+                                            style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,
@@ -194,7 +195,7 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                                       ],
                                     ],
                                   ),
-                                  subtitle: Text('Điểm: ${player.score}'),
+                                  subtitle: Text('${AppLocalizations.of(context)!.score}: ${player.score}'),
                                   trailing: player.ready
                                       ? const Icon(Icons.check_circle, color: Colors.green)
                                       : const Icon(Icons.schedule, color: Colors.orange),
@@ -215,11 +216,11 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.play_arrow),
-                      label: const Text('Bắt đầu game', style: TextStyle(fontSize: 18)),
+                      label: Text(AppLocalizations.of(context)!.startGame, style: const TextStyle(fontSize: 18)),
                       onPressed: () {
                         // TODO: Chuyển sang màn hình chơi PvP
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(content: Text('Chức năng đang phát triển!')),
+                          SnackBar(content: Text(AppLocalizations.of(context)!.featureInDevelopment)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -231,14 +232,14 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                   ),
                 ] else if (room.players.length < 2) ...[
                   const SizedBox(height: 20),
-                  const Card(
+                  Card(
                     child: Padding(
-                      padding: EdgeInsets.all(16),
+                      padding: const EdgeInsets.all(16),
                       child: Row(
                         children: [
-                          CircularProgressIndicator(),
-                          SizedBox(width: 16),
-                          Text('Đang chờ người chơi khác...'),
+                          const CircularProgressIndicator(),
+                          const SizedBox(width: 16),
+                          Text(AppLocalizations.of(context)!.waitingForPlayers),
                         ],
                       ),
                     ),
@@ -260,22 +261,22 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
     switch (status) {
       case 'waiting':
         color = Colors.orange;
-        text = 'Chờ người chơi';
+        text = AppLocalizations.of(context)!.waiting;
         icon = Icons.schedule;
         break;
       case 'playing':
         color = Colors.green;
-        text = 'Đang chơi';
+        text = AppLocalizations.of(context)!.playing;
         icon = Icons.play_arrow;
         break;
       case 'finished':
         color = Colors.grey;
-        text = 'Đã kết thúc';
+        text = AppLocalizations.of(context)!.finished;
         icon = Icons.stop;
         break;
       default:
         color = Colors.grey;
-        text = 'Không xác định';
+        text = AppLocalizations.of(context)!.unknown;
         icon = Icons.help;
     }
 
@@ -307,12 +308,12 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
       context: context,
       barrierDismissible: false,
       builder: (dialogContext) => AlertDialog(
-        title: const Text('Rời phòng'),
-        content: const Text('Bạn có chắc muốn rời phòng?'),
+        title: Text(AppLocalizations.of(context)!.leaveRoom),
+        content: Text(AppLocalizations.of(context)!.leaveRoomConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Hủy'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -321,12 +322,12 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
               showDialog(
                 context: context,
                 barrierDismissible: false,
-                builder: (loadingContext) => const AlertDialog(
+                builder: (loadingContext) => AlertDialog(
                   content: Row(
                     children: [
-                      CircularProgressIndicator(),
-                      SizedBox(width: 16),
-                      Text('Đang rời phòng...'),
+                      const CircularProgressIndicator(),
+                      const SizedBox(width: 16),
+                      Text(AppLocalizations.of(context)!.leavingRoom),
                     ],
                   ),
                 ),
@@ -346,8 +347,8 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                   } else if (mounted) {
                     // Hiển thị lỗi nếu có
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Có lỗi xảy ra khi rời phòng'),
+                      SnackBar(
+                        content: Text(AppLocalizations.of(context)!.leaveRoomError),
                         backgroundColor: Colors.red,
                       ),
                     );
@@ -359,14 +360,14 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                   Navigator.of(context).pop();
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
-                      content: Text('Lỗi: $e'),
+                      content: Text('${AppLocalizations.of(context)!.error}: $e'),
                       backgroundColor: Colors.red,
                     ),
                   );
                 }
               }
             },
-            child: const Text('Rời phòng'),
+            child: Text(AppLocalizations.of(context)!.leaveRoom),
           ),
         ],
       ),
