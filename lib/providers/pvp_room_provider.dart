@@ -136,6 +136,18 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     }
   }
 
+  // Rời phòng im lặng (không cập nhật UI, không context, dùng cho lifecycle)
+  Future<void> leaveRoomSilently(String userId) async {
+    if (state.room == null) return;
+    try {
+      await FirebaseService.leaveRoom(state.room!.roomId, userId);
+      _roomSub?.cancel();
+      state = PvPRoomState(); // Reset state
+    } catch (e) {
+      // Không cập nhật state.error, chỉ log nếu cần
+    }
+  }
+
   @override
   void dispose() {
     _roomSub?.cancel();

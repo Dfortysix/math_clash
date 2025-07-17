@@ -14,12 +14,34 @@ class PvPRoomScreen extends ConsumerStatefulWidget {
   ConsumerState<PvPRoomScreen> createState() => _PvPRoomScreenState();
 }
 
-class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
+class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     // Lắng nghe phòng khi vào màn hình
     ref.read(pvpRoomProvider.notifier).listenRoom(widget.roomId);
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.detached) {
+      _leaveRoomOnAppExit();
+    }
+    super.didChangeAppLifecycleState(state);
+  }
+
+  Future<void> _leaveRoomOnAppExit() async {
+    final user = ref.read(authProvider).user;
+    if (user != null) {
+      await ref.read(pvpRoomProvider.notifier).leaveRoomSilently(user.uid);
+    }
   }
 
   @override
