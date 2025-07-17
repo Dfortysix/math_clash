@@ -72,13 +72,13 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
         backgroundColor: Colors.green,
         foregroundColor: Colors.white,
       ),
-      body: const Center(
+      body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            CircularProgressIndicator(),
-            SizedBox(height: 20),
-            Text('Đang tạo phòng...'),
+            const CircularProgressIndicator(),
+            const SizedBox(height: 20),
+            Text(AppLocalizations.of(context)!.creatingRoom),
           ],
         ),
       ),
@@ -89,12 +89,12 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Rời phòng'),
-        content: const Text('Bạn có chắc muốn rời phòng?'),
+        title: Text(AppLocalizations.of(context)!.leaveRoom),
+        content: Text(AppLocalizations.of(context)!.leaveRoomConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Hủy'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -106,7 +106,7 @@ class _CreateRoomScreenState extends ConsumerState<CreateRoomScreen> {
                 Navigator.of(context).pop(); // Quay về màn hình chính
               }
             },
-            child: const Text('Rời phòng'),
+            child: Text(AppLocalizations.of(context)!.leaveRoom),
           ),
         ],
       ),

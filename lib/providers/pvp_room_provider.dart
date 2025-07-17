@@ -84,13 +84,13 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
       final docRef = FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId);
       final doc = await docRef.get();
       if (!doc.exists) {
-        state = state.copyWith(isLoading: false, error: 'Phòng không tồn tại!');
+        state = state.copyWith(isLoading: false, error: 'Room does not exist!');
         return null;
       }
       final data = doc.data()!;
       final players = (data['players'] as List<dynamic>? ?? []);
       if (players.length >= 2) {
-        state = state.copyWith(isLoading: false, error: 'Phòng đã đủ người!');
+        state = state.copyWith(isLoading: false, error: 'Room is full!');
         return null;
       }
       // Kiểm tra nếu user đã có trong phòng

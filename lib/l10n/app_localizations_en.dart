@@ -182,4 +182,34 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get leaveRoomError => 'An error occurred while leaving the room';
+
+  @override
+  String get creatingRoom => 'Creating room...';
+
+  @override
+  String get pleaseSignInGoogle => 'Please sign in with Google to save score';
+
+  @override
+  String get errorSavingScore => 'Error saving score';
+
+  @override
+  String get roomNotExists => 'Room does not exist!';
+
+  @override
+  String get roomFull => 'Room is full!';
+
+  @override
+  String get googleSignInTimeout => 'Google sign in timeout, please try again!';
+
+  @override
+  String get errorGoogleSignIn => 'Error signing in with Google';
+
+  @override
+  String get errorGoogleSignOut => 'Error signing out';
+
+  @override
+  String get players => 'Players';
+
+  @override
+  String get playersInRoom => 'Players in room';
 }

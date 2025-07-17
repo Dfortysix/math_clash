@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/question.dart';
 import '../services/question_generator.dart';
 import '../services/google_play_games_service.dart';
+import '../l10n/app_localizations.dart';
 
 class SoloModeState {
   final List<Question> questions;
@@ -116,12 +117,12 @@ class SoloModeNotifier extends StateNotifier<SoloModeState> {
         print('SoloModeProvider: Đã lưu điểm thành công');
       } else {
         state = state.copyWith(
-          saveScoreError: 'Vui lòng đăng nhập bằng Google để lưu điểm',
+          saveScoreError: 'Please sign in with Google to save score',
         );
       }
     } catch (e) {
       state = state.copyWith(
-        saveScoreError: 'Lỗi khi lưu điểm: $e',
+        saveScoreError: 'Error saving score: $e',
       );
     } finally {
       state = state.copyWith(isSavingScore: false);

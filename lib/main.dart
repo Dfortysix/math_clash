@@ -333,7 +333,7 @@ class HomeScreen extends ConsumerWidget {
                             await ref.read(authProvider.notifier).signInWithGoogle().timeout(
                               const Duration(seconds: 30),
                               onTimeout: () {
-                                throw Exception('Đăng nhập Google quá lâu, vui lòng thử lại!');
+                                throw Exception(AppLocalizations.of(context)!.googleSignInTimeout);
                               },
                             );
                           } catch (e) {

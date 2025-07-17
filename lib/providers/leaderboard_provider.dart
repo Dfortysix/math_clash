@@ -89,7 +89,7 @@ class LeaderboardNotifier extends StateNotifier<LeaderboardState> {
     if (!FirebaseService.isSignedInWithGoogle()) {
       print('LeaderboardProvider: User chưa đăng nhập Google');
       state = state.copyWith(
-        error: 'Vui lòng đăng nhập bằng Google để lưu điểm',
+                  error: 'Please sign in with Google to save score',
       );
       return false;
     }
@@ -103,7 +103,7 @@ class LeaderboardNotifier extends StateNotifier<LeaderboardState> {
     } catch (e) {
       print('LeaderboardProvider: Lỗi khi lưu điểm: $e');
       state = state.copyWith(
-        error: 'Lỗi khi lưu điểm: $e',
+                  error: 'Error saving score: $e',
       );
       return false;
     }

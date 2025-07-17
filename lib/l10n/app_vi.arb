@@ -55,5 +55,15 @@
   "leaveRoomConfirm": "Bạn có chắc muốn rời phòng?",
   "cancel": "Hủy",
   "leavingRoom": "Đang rời phòng...",
-  "leaveRoomError": "Có lỗi xảy ra khi rời phòng"
+  "leaveRoomError": "Có lỗi xảy ra khi rời phòng",
+  "creatingRoom": "Đang tạo phòng...",
+  "pleaseSignInGoogle": "Vui lòng đăng nhập bằng Google để lưu điểm",
+  "errorSavingScore": "Lỗi khi lưu điểm",
+  "roomNotExists": "Phòng không tồn tại!",
+  "roomFull": "Phòng đã đủ người!",
+  "googleSignInTimeout": "Đăng nhập Google quá lâu, vui lòng thử lại!",
+  "errorGoogleSignIn": "Lỗi khi đăng nhập Google",
+  "errorGoogleSignOut": "Lỗi khi đăng xuất",
+  "players": "Người chơi",
+  "playersInRoom": "Người chơi trong phòng"
 } 

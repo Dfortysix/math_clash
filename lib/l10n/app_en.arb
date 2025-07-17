@@ -55,5 +55,15 @@
   "leaveRoomConfirm": "Are you sure you want to leave the room?",
   "cancel": "Cancel",
   "leavingRoom": "Leaving room...",
-  "leaveRoomError": "An error occurred while leaving the room"
+  "leaveRoomError": "An error occurred while leaving the room",
+  "creatingRoom": "Creating room...",
+  "pleaseSignInGoogle": "Please sign in with Google to save score",
+  "errorSavingScore": "Error saving score",
+  "roomNotExists": "Room does not exist!",
+  "roomFull": "Room is full!",
+  "googleSignInTimeout": "Google sign in timeout, please try again!",
+  "errorGoogleSignIn": "Error signing in with Google",
+  "errorGoogleSignOut": "Error signing out",
+  "players": "Players",
+  "playersInRoom": "Players in room"
 } 

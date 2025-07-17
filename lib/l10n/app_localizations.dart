@@ -436,6 +436,66 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'An error occurred while leaving the room'**
   String get leaveRoomError;
+
+  /// No description provided for @creatingRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Creating room...'**
+  String get creatingRoom;
+
+  /// No description provided for @pleaseSignInGoogle.
+  ///
+  /// In en, this message translates to:
+  /// **'Please sign in with Google to save score'**
+  String get pleaseSignInGoogle;
+
+  /// No description provided for @errorSavingScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Error saving score'**
+  String get errorSavingScore;
+
+  /// No description provided for @roomNotExists.
+  ///
+  /// In en, this message translates to:
+  /// **'Room does not exist!'**
+  String get roomNotExists;
+
+  /// No description provided for @roomFull.
+  ///
+  /// In en, this message translates to:
+  /// **'Room is full!'**
+  String get roomFull;
+
+  /// No description provided for @googleSignInTimeout.
+  ///
+  /// In en, this message translates to:
+  /// **'Google sign in timeout, please try again!'**
+  String get googleSignInTimeout;
+
+  /// No description provided for @errorGoogleSignIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Error signing in with Google'**
+  String get errorGoogleSignIn;
+
+  /// No description provided for @errorGoogleSignOut.
+  ///
+  /// In en, this message translates to:
+  /// **'Error signing out'**
+  String get errorGoogleSignOut;
+
+  /// No description provided for @players.
+  ///
+  /// In en, this message translates to:
+  /// **'Players'**
+  String get players;
+
+  /// No description provided for @playersInRoom.
+  ///
+  /// In en, this message translates to:
+  /// **'Players in room'**
+  String get playersInRoom;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

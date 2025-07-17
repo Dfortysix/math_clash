@@ -106,7 +106,7 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Người chơi: ${room.players.length}/2',
+                          '${AppLocalizations.of(context)!.players}: ${room.players.length}/2',
                           style: const TextStyle(fontSize: 16),
                         ),
                       ],
@@ -122,13 +122,13 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        const Text(
-                          'Người chơi trong phòng:',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.bold,
+                                                  Text(
+                            AppLocalizations.of(context)!.playersInRoom,
+                            style: const TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        ),
                         const SizedBox(height: 16),
                         SizedBox(
                           height: 200, // Giới hạn chiều cao

@@ -182,4 +182,34 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get leaveRoomError => 'Có lỗi xảy ra khi rời phòng';
+
+  @override
+  String get creatingRoom => 'Đang tạo phòng...';
+
+  @override
+  String get pleaseSignInGoogle => 'Vui lòng đăng nhập bằng Google để lưu điểm';
+
+  @override
+  String get errorSavingScore => 'Lỗi khi lưu điểm';
+
+  @override
+  String get roomNotExists => 'Phòng không tồn tại!';
+
+  @override
+  String get roomFull => 'Phòng đã đủ người!';
+
+  @override
+  String get googleSignInTimeout => 'Đăng nhập Google quá lâu, vui lòng thử lại!';
+
+  @override
+  String get errorGoogleSignIn => 'Lỗi khi đăng nhập Google';
+
+  @override
+  String get errorGoogleSignOut => 'Lỗi khi đăng xuất';
+
+  @override
+  String get players => 'Người chơi';
+
+  @override
+  String get playersInRoom => 'Người chơi trong phòng';
 }

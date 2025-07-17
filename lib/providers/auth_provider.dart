@@ -71,7 +71,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: 'Lỗi khi đăng nhập Google: $e',
+                  error: 'Error signing in with Google: $e',
       );
     }
   }
@@ -92,7 +92,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
     } catch (e) {
       state = state.copyWith(
         isLoading: false,
-        error: 'Lỗi khi đăng xuất: $e',
+                  error: 'Error signing out: $e',
       );
     }
   }
