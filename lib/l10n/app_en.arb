@@ -44,5 +44,7 @@
   "language": "Language",
   "about": "About",
   "appDescription": "Math Clash - A fun math game!",
-  "languageChanged": "Language changed!"
+  "languageChanged": "Language changed!",
+  "join": "Join",
+  "savingScore": "Saving score..."
 } 

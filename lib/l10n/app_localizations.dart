@@ -370,6 +370,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Language changed!'**
   String get languageChanged;
+
+  /// No description provided for @join.
+  ///
+  /// In en, this message translates to:
+  /// **'Join'**
+  String get join;
+
+  /// No description provided for @savingScore.
+  ///
+  /// In en, this message translates to:
+  /// **'Saving score...'**
+  String get savingScore;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

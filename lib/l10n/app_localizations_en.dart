@@ -149,4 +149,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get languageChanged => 'Language changed!';
+
+  @override
+  String get join => 'Join';
+
+  @override
+  String get savingScore => 'Saving score...';
 }

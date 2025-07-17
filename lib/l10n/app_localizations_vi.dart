@@ -149,4 +149,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get languageChanged => 'Đã đổi ngôn ngữ!';
+
+  @override
+  String get join => 'Tham gia';
+
+  @override
+  String get savingScore => 'Đang lưu điểm...';
 }

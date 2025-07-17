@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/pvp_room_provider.dart';
 import '../../providers/auth_provider.dart';
 import 'pvp_room_screen.dart';
+import '../../l10n/app_localizations.dart';
 
 class JoinRoomScreen extends ConsumerStatefulWidget {
   const JoinRoomScreen({super.key});
@@ -68,7 +69,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
     final pvpRoomState = ref.watch(pvpRoomProvider);
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Tham gia phòng PvP'),
+        title: Text(AppLocalizations.of(context)!.joinPvpRoom),
         backgroundColor: Colors.purple,
         foregroundColor: Colors.white,
         actions: [
@@ -76,7 +77,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
             IconButton(
               icon: const Icon(Icons.exit_to_app),
               onPressed: () => _showLeaveRoomDialog(context),
-              tooltip: 'Rời phòng',
+              tooltip: AppLocalizations.of(context)!.leaveRoom,
             ),
         ],
       ),
@@ -86,15 +87,15 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
           mainAxisAlignment: MainAxisAlignment.center,
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
-            const Text(
-              'Nhập mã phòng để tham gia',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
+            Text(
+              AppLocalizations.of(context)!.enterRoomCode,
+              style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold),
             ),
             const SizedBox(height: 32),
             TextField(
               controller: _roomIdController,
               decoration: InputDecoration(
-                labelText: 'Mã phòng',
+                labelText: AppLocalizations.of(context)!.roomCode,
                 border: OutlineInputBorder(),
                 errorText: _errorText,
               ),
@@ -113,7 +114,10 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
                         height: 20,
                         child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                       )
-                    : const Text('Tham gia phòng', style: TextStyle(fontSize: 20)),
+                                    : Text(
+                    AppLocalizations.of(context)!.join,
+                    style: const TextStyle(fontSize: 20),
+                  ),
                 onPressed: _isJoining ? null : _joinRoom,
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.purple,

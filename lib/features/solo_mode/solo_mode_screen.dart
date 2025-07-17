@@ -5,6 +5,7 @@ import 'dart:async';
 import '../../models/question.dart';
 import '../../providers/solo_mode_provider.dart';
 import '../../providers/auth_provider.dart';
+import '../../l10n/app_localizations.dart';
 
 class SoloModeScreen extends StatefulWidget {
   const SoloModeScreen({super.key});
@@ -115,7 +116,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Solo Mode'),
+        title: Text(AppLocalizations.of(context)!.soloMode),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),
@@ -184,15 +185,15 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          const Text(
-            'Solo Mode',
-            style: TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
+          Text(
+            AppLocalizations.of(context)!.soloMode,
+            style: const TextStyle(fontSize: 32, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Trả lời 15 câu hỏi toán học\nCàng nhanh càng được nhiều điểm!',
+          Text(
+            AppLocalizations.of(context)!.soloModeDescription,
             textAlign: TextAlign.center,
-            style: TextStyle(fontSize: 18),
+            style: const TextStyle(fontSize: 18),
           ),
           const SizedBox(height: 20),
           
@@ -212,7 +213,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
                   const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Đăng nhập Google để lưu điểm vào bảng xếp hạng',
+                      AppLocalizations.of(context)!.signInToSaveScore,
                       style: TextStyle(
                         color: Colors.orange.shade700,
                         fontSize: 14,
@@ -231,9 +232,9 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
             ),
-            child: const Text(
-              'Bắt đầu',
-              style: TextStyle(fontSize: 20),
+            child: Text(
+              AppLocalizations.of(context)!.start,
+              style: const TextStyle(fontSize: 20),
             ),
           ),
         ],
@@ -254,11 +255,11 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Câu ${state.currentQuestionIndex + 1}/15',
+                '${AppLocalizations.of(context)!.question} ${state.currentQuestionIndex + 1}/15',
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
               Text(
-                'Điểm: ${state.score}',
+                '${AppLocalizations.of(context)!.score}: ${state.score}',
                 style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
               ),
             ],
@@ -273,7 +274,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
               borderRadius: BorderRadius.circular(10),
             ),
             child: Text(
-              'Thời gian: ${state.timeRemaining}s',
+              AppLocalizations.of(context)!.timeRemaining(state.timeRemaining.toString()),
               style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
             ),
           ),
@@ -397,7 +398,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
         children: [
           // Thông báo điểm
           Text(
-            'Bạn đã hoàn thành!\nSố điểm: ${state.score}',
+            AppLocalizations.of(context)!.gameCompleted,
             textAlign: TextAlign.center,
             style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold, color: Colors.blue),
           ),
@@ -424,7 +425,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
                   ),
                   const SizedBox(width: 8),
                   Text(
-                    'Đang lưu điểm...',
+                    AppLocalizations.of(context)!.savingScore,
                     style: TextStyle(
                       color: Colors.blue.shade700,
                       fontSize: 16,
@@ -452,7 +453,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Đăng nhập Google để lưu điểm',
+                          AppLocalizations.of(context)!.signInToSave,
                           style: TextStyle(
                             color: Colors.orange.shade700,
                             fontSize: 16,
@@ -464,7 +465,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Điểm số sẽ không được lưu vào bảng xếp hạng',
+                    AppLocalizations.of(context)!.scoreNotSaved,
                     style: TextStyle(
                       color: Colors.orange.shade600,
                       fontSize: 14,
@@ -482,9 +483,9 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 15),
             ),
-            child: const Text(
-              'Chơi lại',
-              style: TextStyle(fontSize: 20),
+            child: Text(
+              AppLocalizations.of(context)!.playAgain,
+              style: const TextStyle(fontSize: 20),
             ),
           ),
         ],

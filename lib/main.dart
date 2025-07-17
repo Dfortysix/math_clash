@@ -13,6 +13,7 @@ import 'features/pvp_mode/join_room_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
 import 'features/settings/settings_screen.dart';
+import 'providers/language_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -80,37 +81,43 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Math Clash',
-      theme: ThemeData(
-        colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
-        useMaterial3: true,
-      ),
-      localizationsDelegates: [
-        AppLocalizations.delegate,
-        GlobalMaterialLocalizations.delegate,
-        GlobalWidgetsLocalizations.delegate,
-        GlobalCupertinoLocalizations.delegate,
-      ],
-      supportedLocales: [
-        const Locale('en'),
-        const Locale('vi'),
-      ],
-      // home: HomeScreen( ... ) bị xóa để tránh conflict với route '/'
-      routes: {
-        '/': (context) => HomeScreen(
-          isMusicPlaying: _isMusicPlaying,
-          onToggleMusic: () {
-            if (_isMusicPlaying) {
-              _pauseMusic();
-            } else {
-              _resumeMusic();
-            }
+    return Consumer(
+      builder: (context, ref, _) {
+        final locale = ref.watch(languageProvider);
+        return MaterialApp(
+          title: 'Math Clash',
+          theme: ThemeData(
+            colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
+            useMaterial3: true,
+          ),
+          locale: locale,
+          localizationsDelegates: [
+            AppLocalizations.delegate,
+            GlobalMaterialLocalizations.delegate,
+            GlobalWidgetsLocalizations.delegate,
+            GlobalCupertinoLocalizations.delegate,
+          ],
+          supportedLocales: [
+            const Locale('en'),
+            const Locale('vi'),
+          ],
+          // home: HomeScreen( ... ) bị xóa để tránh conflict với route '/'
+          routes: {
+            '/': (context) => HomeScreen(
+              isMusicPlaying: _isMusicPlaying,
+              onToggleMusic: () {
+                if (_isMusicPlaying) {
+                  _pauseMusic();
+                } else {
+                  _resumeMusic();
+                }
+              },
+            ),
+            '/solo': (context) => const SoloModeScreen(),
+            '/leaderboard': (context) => const LeaderboardScreen(),
+            '/settings': (context) => const SettingsScreen(),
           },
-        ),
-        '/solo': (context) => const SoloModeScreen(),
-        '/leaderboard': (context) => const LeaderboardScreen(),
-        '/settings': (context) => const SettingsScreen(),
+        );
       },
     );
   }
