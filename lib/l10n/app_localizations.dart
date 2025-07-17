@@ -508,6 +508,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Room Host'**
   String get roomHost;
+
+  /// No description provided for @sounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Sounds'**
+  String get sounds;
+
+  /// No description provided for @settings_developer.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer:'**
+  String get settings_developer;
+
+  /// No description provided for @settings_developer_name.
+  ///
+  /// In en, this message translates to:
+  /// **'Nguyen Tri Dung'**
+  String get settings_developer_name;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

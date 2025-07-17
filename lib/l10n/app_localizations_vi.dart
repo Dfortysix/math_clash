@@ -218,4 +218,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get roomHost => 'Chủ phòng';
+
+  @override
+  String get sounds => 'Âm thanh';
+
+  @override
+  String get settings_developer => 'Người phát triển:';
+
+  @override
+  String get settings_developer_name => 'Nguyễn Trí Dũng';
 }

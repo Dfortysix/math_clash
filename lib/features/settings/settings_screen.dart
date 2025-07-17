@@ -4,7 +4,9 @@ import '../../providers/language_provider.dart';
 import '../../l10n/app_localizations.dart';
 
 class SettingsScreen extends ConsumerWidget {
-  const SettingsScreen({super.key});
+  final bool isMusicPlaying;
+  final ValueChanged<bool> onToggleMusic;
+  const SettingsScreen({super.key, required this.isMusicPlaying, required this.onToggleMusic});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -77,6 +79,35 @@ class SettingsScreen extends ConsumerWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
+                        l10n.sounds ?? 'Sounds',
+                        style: const TextStyle(
+                          fontSize: 18,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(l10n.turnOffMusic ?? 'Background music'),
+                          Switch(
+                            value: isMusicPlaying,
+                            onChanged: (value) => onToggleMusic(value),
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+              const SizedBox(height: 16),
+              Card(
+                child: Padding(
+                  padding: const EdgeInsets.all(16.0),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
                         l10n.about ?? 'About',
                         style: const TextStyle(
                           fontSize: 18,
@@ -95,6 +126,15 @@ class SettingsScreen extends ConsumerWidget {
                           fontSize: 12,
                           color: Colors.grey[600],
                         ),
+                      ),
+                      const SizedBox(height: 8),
+                      Row(
+                        children: [
+                          Text(l10n.settings_developer ?? 'Developer:'),
+                          const SizedBox(width: 8),
+                          Text(l10n.settings_developer_name ?? 'Nguyễn Trí Dũng',
+                              style: const TextStyle(fontWeight: FontWeight.bold)),
+                        ],
                       ),
                     ],
                   ),

@@ -67,5 +67,8 @@
   "players": "Players",
   "playersInRoom": "Players in room",
   "signedIn": "Signed in",
-  "roomHost": "Room Host"
+  "roomHost": "Room Host",
+  "sounds": "Sounds",
+  "settings_developer": "Developer:",
+  "settings_developer_name": "Nguyen Tri Dung"
 } 

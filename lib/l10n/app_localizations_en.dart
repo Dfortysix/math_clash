@@ -218,4 +218,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get roomHost => 'Room Host';
+
+  @override
+  String get sounds => 'Sounds';
+
+  @override
+  String get settings_developer => 'Developer:';
+
+  @override
+  String get settings_developer_name => 'Nguyen Tri Dung';
 }

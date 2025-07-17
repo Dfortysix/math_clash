@@ -67,5 +67,8 @@
   "players": "Người chơi",
   "playersInRoom": "Người chơi trong phòng",
   "signedIn": "Đã đăng nhập",
-  "roomHost": "Chủ phòng"
+  "roomHost": "Chủ phòng",
+  "sounds": "Âm thanh",
+  "settings_developer": "Người phát triển:",
+  "settings_developer_name": "Nguyễn Trí Dũng"
 } 

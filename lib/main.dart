@@ -115,7 +115,16 @@ class _MyAppState extends State<MyApp> {
             ),
             '/solo': (context) => const SoloModeScreen(),
             '/leaderboard': (context) => const LeaderboardScreen(),
-            '/settings': (context) => const SettingsScreen(),
+            '/settings': (context) => SettingsScreen(
+              isMusicPlaying: _isMusicPlaying,
+              onToggleMusic: (value) {
+                if (value) {
+                  _resumeMusic();
+                } else {
+                  _pauseMusic();
+                }
+              },
+            ),
           },
         );
       },
@@ -150,7 +159,14 @@ class HomeScreen extends ConsumerWidget {
             tooltip: AppLocalizations.of(context)!.settings,
             onPressed: () {
               Navigator.of(context).push(
-                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+                MaterialPageRoute(
+                  builder: (context) => SettingsScreen(
+                    isMusicPlaying: isMusicPlaying,
+                    onToggleMusic: (value) {
+                      onToggleMusic();
+                    },
+                  ),
+                ),
               );
             },
           ),
