@@ -65,7 +65,7 @@ class AuthNotifier extends StateNotifier<AuthState> {
       } else {
         state = state.copyWith(
           isLoading: false,
-          error: 'Đăng nhập Google thất bại',
+          error: 'Google sign in failed',
         );
       }
     } catch (e) {

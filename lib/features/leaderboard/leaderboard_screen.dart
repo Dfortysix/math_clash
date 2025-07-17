@@ -105,9 +105,9 @@ class _LeaderboardScreenState extends ConsumerState<LeaderboardScreen> {
                         color: Colors.green,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Text(
-                        'Đã đăng nhập',
-                        style: TextStyle(
+                      child: Text(
+                        AppLocalizations.of(context)!.signedIn,
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.bold,

@@ -76,11 +76,11 @@ class FirebaseService {
       final user = _auth.currentUser;
       
       if (user == null) {
-        throw Exception('Không có user đăng nhập');
+        throw Exception('No user logged in');
       }
       
       if (!isSignedInWithGoogle()) {
-        throw Exception('Chỉ có thể lưu điểm khi đăng nhập bằng Google');
+        throw Exception('Can only save score when signed in with Google');
       }
       
       print('FirebaseService: Bắt đầu lưu điểm cho Google user - userId: ${user.uid}, displayName: ${user.displayName}, score: $score, gameMode: $gameMode');

@@ -496,6 +496,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Players in room'**
   String get playersInRoom;
+
+  /// No description provided for @signedIn.
+  ///
+  /// In en, this message translates to:
+  /// **'Signed in'**
+  String get signedIn;
+
+  /// No description provided for @roomHost.
+  ///
+  /// In en, this message translates to:
+  /// **'Room Host'**
+  String get roomHost;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

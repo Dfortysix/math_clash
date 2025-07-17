@@ -153,7 +153,7 @@ class _SoloModeScreenState extends State<SoloModeScreen> {
                     content: Text(soloState.saveScoreError!),
                     backgroundColor: Colors.orange,
                     action: SnackBarAction(
-                      label: 'Đóng',
+                      label: AppLocalizations.of(context)!.close,
                       textColor: Colors.white,
                       onPressed: () {
                         ref.read(soloModeProvider.notifier).clearSaveScoreError();

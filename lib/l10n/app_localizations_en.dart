@@ -212,4 +212,10 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get playersInRoom => 'Players in room';
+
+  @override
+  String get signedIn => 'Signed in';
+
+  @override
+  String get roomHost => 'Room Host';
 }

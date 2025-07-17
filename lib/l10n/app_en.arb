@@ -65,5 +65,7 @@
   "errorGoogleSignIn": "Error signing in with Google",
   "errorGoogleSignOut": "Error signing out",
   "players": "Players",
-  "playersInRoom": "Players in room"
+  "playersInRoom": "Players in room",
+  "signedIn": "Signed in",
+  "roomHost": "Room Host"
 } 

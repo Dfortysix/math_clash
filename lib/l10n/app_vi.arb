@@ -65,5 +65,7 @@
   "errorGoogleSignIn": "Lỗi khi đăng nhập Google",
   "errorGoogleSignOut": "Lỗi khi đăng xuất",
   "players": "Người chơi",
-  "playersInRoom": "Người chơi trong phòng"
+  "playersInRoom": "Người chơi trong phòng",
+  "signedIn": "Đã đăng nhập",
+  "roomHost": "Chủ phòng"
 } 

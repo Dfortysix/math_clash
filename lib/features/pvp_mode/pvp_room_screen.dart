@@ -48,7 +48,7 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
           IconButton(
             icon: const Icon(Icons.exit_to_app),
             onPressed: () => _showLeaveRoomDialog(context),
-            tooltip: 'Rời phòng',
+            tooltip: AppLocalizations.of(context)!.leaveRoom,
           ),
         ],
       ),
@@ -165,9 +165,9 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
                                             color: Colors.orange,
                                             borderRadius: BorderRadius.circular(12),
                                           ),
-                                          child: const Text(
-                                            'Chủ phòng',
-                                            style: TextStyle(
+                                          child: Text(
+                                            AppLocalizations.of(context)!.roomHost,
+                                            style: const TextStyle(
                                               color: Colors.white,
                                               fontSize: 12,
                                               fontWeight: FontWeight.bold,

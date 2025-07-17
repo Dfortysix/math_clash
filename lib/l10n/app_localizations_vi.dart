@@ -212,4 +212,10 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get playersInRoom => 'Người chơi trong phòng';
+
+  @override
+  String get signedIn => 'Đã đăng nhập';
+
+  @override
+  String get roomHost => 'Chủ phòng';
 }

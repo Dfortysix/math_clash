@@ -31,7 +31,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
     final roomId = _roomIdController.text.trim();
     if (roomId.isEmpty) {
       setState(() {
-        _errorText = 'Vui lòng nhập mã phòng';
+        _errorText = AppLocalizations.of(context)!.pleaseEnterRoomCode;
         _isJoining = false;
       });
       return;
@@ -40,7 +40,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
     final user = authState.user;
     if (user == null) {
       setState(() {
-        _errorText = 'Bạn cần đăng nhập Google';
+        _errorText = AppLocalizations.of(context)!.needGoogleSignIn;
         _isJoining = false;
       });
       return;
@@ -58,7 +58,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
       );
     } else {
       setState(() {
-        _errorText = ref.read(pvpRoomProvider).error ?? 'Không thể tham gia phòng';
+        _errorText = ref.read(pvpRoomProvider).error ?? AppLocalizations.of(context)!.cannotJoinRoom;
         _isJoining = false;
       });
     }
@@ -136,12 +136,12 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Rời phòng'),
-        content: const Text('Bạn có chắc muốn rời phòng?'),
+        title: Text(AppLocalizations.of(context)!.leaveRoom),
+        content: Text(AppLocalizations.of(context)!.leaveRoomConfirm),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(context).pop(),
-            child: const Text('Hủy'),
+            child: Text(AppLocalizations.of(context)!.cancel),
           ),
           TextButton(
             onPressed: () async {
@@ -153,7 +153,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
                 Navigator.of(context).popUntil((route) => route.isFirst);
               }
             },
-            child: const Text('Rời phòng'),
+            child: Text(AppLocalizations.of(context)!.leaveRoom),
           ),
         ],
       ),
