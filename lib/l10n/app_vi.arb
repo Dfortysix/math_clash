@@ -39,5 +39,10 @@
   "notSignedIn": "Chưa đăng nhập",
   "signInToSaveLeaderboard": "Đăng nhập Google để lưu điểm vào bảng xếp hạng",
   "pvpMode": "Chế độ PvP",
-  "soundError": "Lỗi phát âm thanh"
+  "soundError": "Lỗi phát âm thanh",
+  "settings": "Cài đặt",
+  "language": "Ngôn ngữ",
+  "about": "Giới thiệu",
+  "appDescription": "Math Clash - Trò chơi toán học vui nhộn!",
+  "languageChanged": "Đã đổi ngôn ngữ!"
 } 

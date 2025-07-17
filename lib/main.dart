@@ -12,6 +12,7 @@ import 'features/pvp_mode/create_room_screen.dart';
 import 'features/pvp_mode/join_room_screen.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'l10n/app_localizations.dart';
+import 'features/settings/settings_screen.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -109,6 +110,7 @@ class _MyAppState extends State<MyApp> {
         ),
         '/solo': (context) => const SoloModeScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),
+        '/settings': (context) => const SettingsScreen(),
       },
     );
   }
@@ -135,6 +137,15 @@ class HomeScreen extends ConsumerWidget {
                 ? AppLocalizations.of(context)!.turnOffMusic
                 : AppLocalizations.of(context)!.turnOnMusic,
             onPressed: onToggleMusic,
+          ),
+          IconButton(
+            icon: const Icon(Icons.settings),
+            tooltip: AppLocalizations.of(context)!.settings,
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (context) => const SettingsScreen()),
+              );
+            },
           ),
         ],
       ),

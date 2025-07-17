@@ -134,4 +134,19 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get soundError => 'Lỗi phát âm thanh';
+
+  @override
+  String get settings => 'Cài đặt';
+
+  @override
+  String get language => 'Ngôn ngữ';
+
+  @override
+  String get about => 'Giới thiệu';
+
+  @override
+  String get appDescription => 'Math Clash - Trò chơi toán học vui nhộn!';
+
+  @override
+  String get languageChanged => 'Đã đổi ngôn ngữ!';
 }

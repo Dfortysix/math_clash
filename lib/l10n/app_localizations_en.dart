@@ -134,4 +134,19 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get soundError => 'Sound playback error';
+
+  @override
+  String get settings => 'Settings';
+
+  @override
+  String get language => 'Language';
+
+  @override
+  String get about => 'About';
+
+  @override
+  String get appDescription => 'Math Clash - A fun math game!';
+
+  @override
+  String get languageChanged => 'Language changed!';
 }

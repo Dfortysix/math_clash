@@ -39,5 +39,10 @@
   "notSignedIn": "Not signed in",
   "signInToSaveLeaderboard": "Sign in with Google to save score to leaderboard",
   "pvpMode": "PvP Mode",
-  "soundError": "Sound playback error"
+  "soundError": "Sound playback error",
+  "settings": "Settings",
+  "language": "Language",
+  "about": "About",
+  "appDescription": "Math Clash - A fun math game!",
+  "languageChanged": "Language changed!"
 } 
