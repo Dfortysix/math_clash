@@ -146,7 +146,7 @@ class _JoinRoomScreenState extends ConsumerState<JoinRoomScreen> {
               final user = authState.user;
               if (user != null) {
                 await ref.read(pvpRoomProvider.notifier).leaveRoom(user.uid);
-                Navigator.of(context).pop(); // Quay về màn hình chính
+                Navigator.of(context).popUntil((route) => route.isFirst);
               }
             },
             child: const Text('Rời phòng'),

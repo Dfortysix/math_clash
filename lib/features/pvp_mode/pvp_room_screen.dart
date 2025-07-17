@@ -305,22 +305,65 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> {
   void _showLeaveRoomDialog(BuildContext context) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      barrierDismissible: false,
+      builder: (dialogContext) => AlertDialog(
         title: const Text('Rời phòng'),
         content: const Text('Bạn có chắc muốn rời phòng?'),
         actions: [
           TextButton(
-            onPressed: () => Navigator.of(context).pop(),
+            onPressed: () => Navigator.of(dialogContext).pop(),
             child: const Text('Hủy'),
           ),
           TextButton(
             onPressed: () async {
-              Navigator.of(context).pop();
-              final authState = ref.read(authProvider);
-              final user = authState.user;
-              if (user != null) {
-                await ref.read(pvpRoomProvider.notifier).leaveRoom(user.uid);
-                Navigator.of(context).pop(); // Quay về màn hình chính
+              Navigator.of(dialogContext).pop();
+              // Hiển thị loading
+              showDialog(
+                context: context,
+                barrierDismissible: false,
+                builder: (loadingContext) => const AlertDialog(
+                  content: Row(
+                    children: [
+                      CircularProgressIndicator(),
+                      SizedBox(width: 16),
+                      Text('Đang rời phòng...'),
+                    ],
+                  ),
+                ),
+              );
+              try {
+                final authState = ref.read(authProvider);
+                final user = authState.user;
+                if (user != null) {
+                  final success = await ref.read(pvpRoomProvider.notifier).leaveRoom(user.uid);
+                  // Đóng loading dialog
+                  if (mounted) {
+                    Navigator.of(context).pop();
+                  }
+                  if (success && mounted) {
+                    // Điều hướng về màn hình chính
+                    Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+                  } else if (mounted) {
+                    // Hiển thị lỗi nếu có
+                    ScaffoldMessenger.of(context).showSnackBar(
+                      const SnackBar(
+                        content: Text('Có lỗi xảy ra khi rời phòng'),
+                        backgroundColor: Colors.red,
+                      ),
+                    );
+                  }
+                }
+              } catch (e) {
+                // Đóng loading dialog nếu có lỗi
+                if (mounted) {
+                  Navigator.of(context).pop();
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    SnackBar(
+                      content: Text('Lỗi: $e'),
+                      backgroundColor: Colors.red,
+                    ),
+                  );
+                }
               }
             },
             child: const Text('Rời phòng'),

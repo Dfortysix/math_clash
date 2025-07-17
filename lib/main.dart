@@ -83,17 +83,18 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
-      home: HomeScreen(
-        isMusicPlaying: _isMusicPlaying,
-        onToggleMusic: () {
-          if (_isMusicPlaying) {
-            _pauseMusic();
-          } else {
-            _resumeMusic();
-          }
-        },
-      ),
+      // home: HomeScreen( ... ) bị xóa để tránh conflict với route '/'
       routes: {
+        '/': (context) => HomeScreen(
+          isMusicPlaying: _isMusicPlaying,
+          onToggleMusic: () {
+            if (_isMusicPlaying) {
+              _pauseMusic();
+            } else {
+              _resumeMusic();
+            }
+          },
+        ),
         '/solo': (context) => const SoloModeScreen(),
         '/leaderboard': (context) => const LeaderboardScreen(),
       },
