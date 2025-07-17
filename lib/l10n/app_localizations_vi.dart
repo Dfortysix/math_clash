@@ -1,0 +1,137 @@
+// ignore: unused_import
+import 'package:intl/intl.dart' as intl;
+import 'app_localizations.dart';
+
+// ignore_for_file: type=lint
+
+/// The translations for Vietnamese (`vi`).
+class AppLocalizationsVi extends AppLocalizations {
+  AppLocalizationsVi([String locale = 'vi']) : super(locale);
+
+  @override
+  String get appTitle => 'Math Clash';
+
+  @override
+  String get soloMode => 'Chế độ Solo';
+
+  @override
+  String get createPvpRoom => 'Tạo phòng PvP';
+
+  @override
+  String get joinPvpRoom => 'Tham gia phòng PvP';
+
+  @override
+  String get quickMatch => 'Ghép trực tuyến';
+
+  @override
+  String get leaderboard => 'Bảng Xếp Hạng';
+
+  @override
+  String get signInGoogle => 'Đăng nhập Google';
+
+  @override
+  String get signOutGoogle => 'Đăng xuất Google';
+
+  @override
+  String get turnOffMusic => 'Tắt nhạc nền';
+
+  @override
+  String get turnOnMusic => 'Mở nhạc nền';
+
+  @override
+  String get soloModeDescription => 'Trả lời 15 câu hỏi toán học\nCàng nhanh càng được nhiều điểm!';
+
+  @override
+  String get signInToSaveScore => 'Đăng nhập Google để lưu điểm vào bảng xếp hạng';
+
+  @override
+  String get start => 'Bắt đầu';
+
+  @override
+  String get question => 'Câu hỏi';
+
+  @override
+  String get score => 'Điểm';
+
+  @override
+  String timeRemaining(Object seconds) {
+    return 'Thời gian: ${seconds}s';
+  }
+
+  @override
+  String get gameCompleted => 'Bạn đã hoàn thành!';
+
+  @override
+  String yourScore(Object score) {
+    return 'Số điểm: $score';
+  }
+
+  @override
+  String get signInToSave => 'Đăng nhập để lưu điểm';
+
+  @override
+  String get scoreNotSaved => 'Điểm số sẽ không được lưu vào bảng xếp hạng';
+
+  @override
+  String get close => 'Đóng';
+
+  @override
+  String get playAgain => 'Chơi lại';
+
+  @override
+  String get backToMenu => 'Về menu';
+
+  @override
+  String get roomCode => 'Mã phòng';
+
+  @override
+  String get copyRoomCode => 'Sao chép mã phòng';
+
+  @override
+  String get roomCodeCopied => 'Đã sao chép mã phòng!';
+
+  @override
+  String get startGame => 'Bắt đầu game';
+
+  @override
+  String get waitingForPlayers => 'Đang chờ người chơi khác...';
+
+  @override
+  String get enterRoomCode => 'Nhập mã phòng để tham gia';
+
+  @override
+  String get pleaseEnterRoomCode => 'Vui lòng nhập mã phòng';
+
+  @override
+  String get needGoogleSignIn => 'Bạn cần đăng nhập Google';
+
+  @override
+  String get cannotJoinRoom => 'Không thể tham gia phòng';
+
+  @override
+  String get leaveRoom => 'Rời phòng';
+
+  @override
+  String get featureInDevelopment => 'Chức năng đang phát triển!';
+
+  @override
+  String get error => 'Lỗi';
+
+  @override
+  String get tryAgain => 'Thử lại';
+
+  @override
+  String get noLeaderboardData => 'Chưa có dữ liệu xếp hạng';
+
+  @override
+  String get notSignedIn => 'Chưa đăng nhập';
+
+  @override
+  String get signInToSaveLeaderboard => 'Đăng nhập Google để lưu điểm vào bảng xếp hạng';
+
+  @override
+  String get pvpMode => 'Chế độ PvP';
+
+  @override
+  String get soundError => 'Lỗi phát âm thanh';
+}

@@ -10,6 +10,8 @@ import 'features/solo_mode/solo_mode_screen.dart';
 import 'features/leaderboard/leaderboard_screen.dart';
 import 'features/pvp_mode/create_room_screen.dart';
 import 'features/pvp_mode/join_room_screen.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
+import 'l10n/app_localizations.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -83,6 +85,16 @@ class _MyAppState extends State<MyApp> {
         colorScheme: ColorScheme.fromSeed(seedColor: Colors.blue),
         useMaterial3: true,
       ),
+      localizationsDelegates: [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en'),
+        const Locale('vi'),
+      ],
       // home: HomeScreen( ... ) bị xóa để tránh conflict với route '/'
       routes: {
         '/': (context) => HomeScreen(
@@ -113,13 +125,15 @@ class HomeScreen extends ConsumerWidget {
     
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Math Clash'),
+        title: Text(AppLocalizations.of(context)!.appTitle),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
         actions: [
           IconButton(
             icon: Icon(isMusicPlaying ? Icons.music_note : Icons.music_off),
-            tooltip: isMusicPlaying ? 'Tắt nhạc nền' : 'Mở nhạc nền',
+            tooltip: isMusicPlaying
+                ? AppLocalizations.of(context)!.turnOffMusic
+                : AppLocalizations.of(context)!.turnOnMusic,
             onPressed: onToggleMusic,
           ),
         ],
@@ -186,7 +200,7 @@ class HomeScreen extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: Icon(Icons.person),
-                      label: Text('Solo Mode', style: TextStyle(fontSize: 20)),
+                      label: Text(AppLocalizations.of(context)!.soloMode, style: TextStyle(fontSize: 20)),
                       onPressed: () {
                         Navigator.pushNamed(context, '/solo');
                       },
@@ -202,7 +216,7 @@ class HomeScreen extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: Icon(Icons.meeting_room),
-                      label: Text('Tạo phòng PvP', style: TextStyle(fontSize: 20)),
+                      label: Text(AppLocalizations.of(context)!.createPvpRoom, style: TextStyle(fontSize: 20)),
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => const CreateRoomScreen()),
@@ -220,7 +234,7 @@ class HomeScreen extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: Icon(Icons.input),
-                      label: Text('Tham gia phòng PvP', style: TextStyle(fontSize: 20)),
+                      label: Text(AppLocalizations.of(context)!.joinPvpRoom, style: TextStyle(fontSize: 20)),
                       onPressed: () {
                         Navigator.of(context).push(
                           MaterialPageRoute(builder: (context) => const JoinRoomScreen()),
@@ -238,10 +252,10 @@ class HomeScreen extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: Icon(Icons.flash_on),
-                      label: Text('Ghép trực tuyến', style: TextStyle(fontSize: 20)),
+                      label: Text(AppLocalizations.of(context)!.quickMatch, style: TextStyle(fontSize: 20)),
                       onPressed: () {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text('Chức năng đang phát triển!')),
+                          SnackBar(content: Text(AppLocalizations.of(context)!.featureInDevelopment)),
                         );
                       },
                       style: ElevatedButton.styleFrom(
@@ -256,7 +270,7 @@ class HomeScreen extends ConsumerWidget {
                     width: double.infinity,
                     child: ElevatedButton.icon(
                       icon: Icon(Icons.leaderboard),
-                      label: Text('Bảng Xếp Hạng', style: TextStyle(fontSize: 20)),
+                      label: Text(AppLocalizations.of(context)!.leaderboard, style: TextStyle(fontSize: 20)),
                       onPressed: () {
                         Navigator.pushNamed(context, '/leaderboard');
                       },
@@ -286,8 +300,8 @@ class HomeScreen extends ConsumerWidget {
                               height: 20,
                               child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                             )
-                          : const Text(
-                              'Đăng xuất Google',
+                          : Text(
+                              AppLocalizations.of(context)!.signOutGoogle,
                               style: TextStyle(fontSize: 20),
                             ),
                     )
@@ -321,8 +335,8 @@ class HomeScreen extends ConsumerWidget {
                                 height: 20,
                                 child: CircularProgressIndicator(color: Colors.white, strokeWidth: 2),
                               )
-                            : const Text(
-                                'Đăng nhập Google',
+                            : Text(
+                                AppLocalizations.of(context)!.signInGoogle,
                                 style: TextStyle(fontSize: 20),
                               ),
                       ),
