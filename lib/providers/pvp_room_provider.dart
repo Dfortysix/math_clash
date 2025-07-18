@@ -46,6 +46,7 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
         displayName: displayName,
         avatarUrl: avatarUrl,
         questions: questions,
+        // Truyền các trường mới nếu cần
       );
       listenRoom(roomId);
       return roomId;
@@ -100,13 +101,16 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
         return roomId;
       }
       // Thêm user vào danh sách players
-      players.add({
-        'userId': userId,
-        'displayName': displayName,
-        'avatarUrl': avatarUrl,
-        'score': 0,
-        'ready': false,
-      });
+      players.add(PlayerInRoom(
+        userId: userId,
+        displayName: displayName,
+        avatarUrl: avatarUrl,
+        score: 0,
+        ready: false,
+        currentQuestion: 0,
+        answers: <String>[],
+        isFinished: false,
+      ).toMap());
       await docRef.update({
         'players': players,
         'updatedAt': FieldValue.serverTimestamp(),
@@ -155,12 +159,16 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     final players = List<PlayerInRoom>.from(state.room!.players);
     final index = players.indexWhere((p) => p.userId == userId);
     if (index == -1) return;
+    final old = players[index];
     players[index] = PlayerInRoom(
-      userId: players[index].userId,
-      displayName: players[index].displayName,
-      avatarUrl: players[index].avatarUrl,
-      score: players[index].score,
+      userId: old.userId,
+      displayName: old.displayName,
+      avatarUrl: old.avatarUrl,
+      score: old.score,
       ready: ready,
+      currentQuestion: old.currentQuestion,
+      answers: old.answers,
+      isFinished: old.isFinished,
     );
     // Cập nhật lên Firestore
     await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
@@ -174,7 +182,9 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     if (state.room == null) return;
     final roomId = state.room!.roomId;
     final players = List<PlayerInRoom>.from(state.room!.players);
-    players.removeWhere((p) => p.userId == userId);
+    final index = players.indexWhere((p) => p.userId == userId);
+    if (index == -1) return;
+    players.removeAt(index);
     await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
       'players': players.map((e) => e.toMap()).toList(),
       'updatedAt': FieldValue.serverTimestamp(),
@@ -187,6 +197,36 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     final roomId = state.room!.roomId;
     await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
       'status': 'playing',
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
+  // Trả lời câu hỏi PvP
+  Future<void> answerQuestionPvp({
+    required String userId,
+    required String answer,
+    required int scoreDelta,
+    required bool isLastQuestion,
+  }) async {
+    if (state.room == null) return;
+    final roomId = state.room!.roomId;
+    final players = List<PlayerInRoom>.from(state.room!.players);
+    final index = players.indexWhere((p) => p.userId == userId);
+    if (index == -1) return;
+    final player = players[index];
+    final newAnswers = List<String>.from(player.answers)..add(answer);
+    players[index] = PlayerInRoom(
+      userId: player.userId,
+      displayName: player.displayName,
+      avatarUrl: player.avatarUrl,
+      score: player.score + scoreDelta,
+      ready: player.ready,
+      currentQuestion: player.currentQuestion + 1,
+      answers: newAnswers,
+      isFinished: isLastQuestion,
+    );
+    await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
+      'players': players.map((e) => e.toMap()).toList(),
       'updatedAt': FieldValue.serverTimestamp(),
     });
   }

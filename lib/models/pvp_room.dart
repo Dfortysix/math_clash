@@ -6,6 +6,9 @@ class PlayerInRoom {
   final String avatarUrl;
   final int score;
   final bool ready;
+  final int currentQuestion;
+  final List<String> answers;
+  final bool isFinished;
 
   PlayerInRoom({
     required this.userId,
@@ -13,6 +16,9 @@ class PlayerInRoom {
     required this.avatarUrl,
     required this.score,
     required this.ready,
+    required this.currentQuestion,
+    required this.answers,
+    required this.isFinished,
   });
 
   factory PlayerInRoom.fromMap(Map<String, dynamic> map) {
@@ -22,6 +28,9 @@ class PlayerInRoom {
       avatarUrl: map['avatarUrl'] ?? '',
       score: map['score'] ?? 0,
       ready: map['ready'] ?? false,
+      currentQuestion: map['currentQuestion'] ?? 0,
+      answers: List<String>.from(map['answers'] ?? []),
+      isFinished: map['isFinished'] ?? false,
     );
   }
 
@@ -32,6 +41,9 @@ class PlayerInRoom {
       'avatarUrl': avatarUrl,
       'score': score,
       'ready': ready,
+      'currentQuestion': currentQuestion,
+      'answers': answers,
+      'isFinished': isFinished,
     };
   }
 }

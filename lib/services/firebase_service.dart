@@ -189,6 +189,9 @@ class FirebaseService {
           'avatarUrl': avatarUrl,
           'score': 0,
           'ready': false,
+          'currentQuestion': 0,
+          'answers': <String>[],
+          'isFinished': false,
         }
       ],
       'questions': questions,
