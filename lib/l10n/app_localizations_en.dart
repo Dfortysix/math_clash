@@ -239,4 +239,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get kick => 'Kick';
+
+  @override
+  String get win => 'You win!';
+
+  @override
+  String get lose => 'You lose!';
+
+  @override
+  String get draw => 'Draw!';
 }

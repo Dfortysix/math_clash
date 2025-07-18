@@ -74,5 +74,8 @@
   "ready": "Sẵn sàng",
   "notReady": "Chưa sẵn sàng",
   "cancelReady": "Hủy sẵn sàng",
-  "kick": "Kick"
+  "kick": "Kick",
+  "win": "Bạn thắng!",
+  "lose": "Bạn thua!",
+  "draw": "Hòa!"
 } 

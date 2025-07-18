@@ -239,4 +239,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get kick => 'Kick';
+
+  @override
+  String get win => 'Bạn thắng!';
+
+  @override
+  String get lose => 'Bạn thua!';
+
+  @override
+  String get draw => 'Hòa!';
 }

@@ -74,5 +74,8 @@
   "ready": "Ready",
   "notReady": "Not ready",
   "cancelReady": "Cancel ready",
-  "kick": "Kick"
+  "kick": "Kick",
+  "win": "You win!",
+  "lose": "You lose!",
+  "draw": "Draw!"
 } 

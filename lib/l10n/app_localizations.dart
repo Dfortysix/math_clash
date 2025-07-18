@@ -550,6 +550,24 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Kick'**
   String get kick;
+
+  /// No description provided for @win.
+  ///
+  /// In en, this message translates to:
+  /// **'You win!'**
+  String get win;
+
+  /// No description provided for @lose.
+  ///
+  /// In en, this message translates to:
+  /// **'You lose!'**
+  String get lose;
+
+  /// No description provided for @draw.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw!'**
+  String get draw;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {
