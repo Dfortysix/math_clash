@@ -61,7 +61,9 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
     final canStartGame = room.players.length >= 2 && isHost && room.status == 'waiting';
     final isCurrentUserReady = room.players.any((p) => p.userId == currentUser?.uid && p.ready);
     final canShowReadyButton = currentUser != null && !isHost;
-    final canShowStartButton = room.players.length == 2 && isHost && room.players.every((p) => p.ready);
+    final canShowStartButton = room.players.length == 2 &&
+      isHost &&
+      room.players.where((p) => p.userId != currentUser?.uid).every((p) => p.ready);
 
     return Scaffold(
       appBar: AppBar(
@@ -234,17 +236,24 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
                                     children: [
                                       Text('${AppLocalizations.of(context)!.score}: ${player.score}'),
                                       const SizedBox(width: 12),
-                                      player.ready
-                                        ? Row(children: [
-                                            const Icon(Icons.check_circle, color: Colors.green, size: 18),
-                                            const SizedBox(width: 4),
-                                            Text(AppLocalizations.of(context)!.ready, style: const TextStyle(color: Colors.green)),
-                                          ])
-                                        : Row(children: [
-                                            const Icon(Icons.hourglass_empty, color: Colors.orange, size: 18),
-                                            const SizedBox(width: 4),
-                                            Text(AppLocalizations.of(context)!.notReady, style: const TextStyle(color: Colors.orange)),
-                                          ]),
+                                      if (isHost && index == 0)
+                                        Row(children: [
+                                          const Icon(Icons.check_circle, color: Colors.green, size: 18),
+                                          const SizedBox(width: 4),
+                                          Text(AppLocalizations.of(context)!.ready, style: const TextStyle(color: Colors.green)),
+                                        ])
+                                      else
+                                        player.ready
+                                          ? Row(children: [
+                                              const Icon(Icons.check_circle, color: Colors.green, size: 18),
+                                              const SizedBox(width: 4),
+                                              Text(AppLocalizations.of(context)!.ready, style: const TextStyle(color: Colors.green)),
+                                            ])
+                                          : Row(children: [
+                                              const Icon(Icons.hourglass_empty, color: Colors.orange, size: 18),
+                                              const SizedBox(width: 4),
+                                              Text(AppLocalizations.of(context)!.notReady, style: const TextStyle(color: Colors.orange)),
+                                            ]),
                                     ],
                                   ),
                                 ),
