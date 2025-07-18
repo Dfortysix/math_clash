@@ -527,9 +527,29 @@ abstract class AppLocalizations {
   /// **'Nguyen Tri Dung'**
   String get settings_developer_name;
 
+  /// No description provided for @ready.
+  ///
+  /// In en, this message translates to:
+  /// **'Ready'**
   String get ready;
+
+  /// No description provided for @notReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Not ready'**
   String get notReady;
+
+  /// No description provided for @cancelReady.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel ready'**
   String get cancelReady;
+
+  /// No description provided for @kick.
+  ///
+  /// In en, this message translates to:
+  /// **'Kick'**
+  String get kick;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

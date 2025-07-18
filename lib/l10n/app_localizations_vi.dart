@@ -230,8 +230,13 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get ready => 'Sẵn sàng';
+
   @override
   String get notReady => 'Chưa sẵn sàng';
+
   @override
   String get cancelReady => 'Hủy sẵn sàng';
+
+  @override
+  String get kick => 'Kick';
 }

@@ -200,6 +200,16 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
                                           ),
                                         ),
                                       ],
+                                      if (isHost && !isCurrentUser) ...[
+                                        const SizedBox(width: 8),
+                                        IconButton(
+                                          icon: const Icon(Icons.remove_circle, color: Colors.red),
+                                          tooltip: AppLocalizations.of(context)!.kick,
+                                          onPressed: () async {
+                                            await ref.read(pvpRoomProvider.notifier).kickPlayer(player.userId);
+                                          },
+                                        ),
+                                      ],
                                       if (isCurrentUser) ...[
                                         const SizedBox(width: 8),
                                         Container(

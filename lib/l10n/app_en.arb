@@ -73,5 +73,6 @@
   "settings_developer_name": "Nguyen Tri Dung",
   "ready": "Ready",
   "notReady": "Not ready",
-  "cancelReady": "Cancel ready"
+  "cancelReady": "Cancel ready",
+  "kick": "Kick"
 } 

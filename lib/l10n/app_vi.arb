@@ -73,5 +73,6 @@
   "settings_developer_name": "Nguyễn Trí Dũng",
   "ready": "Sẵn sàng",
   "notReady": "Chưa sẵn sàng",
-  "cancelReady": "Hủy sẵn sàng"
+  "cancelReady": "Hủy sẵn sàng",
+  "kick": "Kick"
 } 

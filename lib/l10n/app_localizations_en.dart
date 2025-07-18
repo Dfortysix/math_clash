@@ -230,8 +230,13 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get ready => 'Ready';
+
   @override
   String get notReady => 'Not ready';
+
   @override
   String get cancelReady => 'Cancel ready';
+
+  @override
+  String get kick => 'Kick';
 }

@@ -169,6 +169,18 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     });
   }
 
+  // Chủ phòng kick người chơi khác khỏi phòng
+  Future<void> kickPlayer(String userId) async {
+    if (state.room == null) return;
+    final roomId = state.room!.roomId;
+    final players = List<PlayerInRoom>.from(state.room!.players);
+    players.removeWhere((p) => p.userId == userId);
+    await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
+      'players': players.map((e) => e.toMap()).toList(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   @override
   void dispose() {
     _roomSub?.cancel();
