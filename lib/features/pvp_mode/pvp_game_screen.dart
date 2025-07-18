@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/pvp_room_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../l10n/app_localizations.dart';
+import 'pvp_room_screen.dart';
 
 class PvPGameScreen extends ConsumerStatefulWidget {
   final String roomId;
@@ -166,7 +167,15 @@ class _PvPGameScreenState extends ConsumerState<PvPGameScreen> {
             Text('${AppLocalizations.of(context)!.score}: $opponentScore', style: const TextStyle(fontSize: 20)),
             const SizedBox(height: 32),
             ElevatedButton(
-              onPressed: () => Navigator.of(context).popUntil((route) => route.isFirst),
+              onPressed: () async {
+                await ref.read(pvpRoomProvider.notifier).updateRoomStatus(widget.roomId, 'waiting');
+                Navigator.of(context).pushAndRemoveUntil(
+                  MaterialPageRoute(
+                    builder: (context) => PvPRoomScreen(roomId: widget.roomId),
+                  ),
+                  (route) => false,
+                );
+              },
               child: Text(AppLocalizations.of(context)!.backToMenu),
             ),
           ],

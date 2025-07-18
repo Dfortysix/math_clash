@@ -231,6 +231,14 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     });
   }
 
+  // Cập nhật trạng thái phòng
+  Future<void> updateRoomStatus(String roomId, String status) async {
+    await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
+      'status': status,
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   @override
   void dispose() {
     _roomSub?.cancel();
