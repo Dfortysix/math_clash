@@ -70,5 +70,8 @@
   "roomHost": "Chủ phòng",
   "sounds": "Âm thanh",
   "settings_developer": "Người phát triển:",
-  "settings_developer_name": "Nguyễn Trí Dũng"
+  "settings_developer_name": "Nguyễn Trí Dũng",
+  "ready": "Sẵn sàng",
+  "notReady": "Chưa sẵn sàng",
+  "cancelReady": "Hủy sẵn sàng"
 } 

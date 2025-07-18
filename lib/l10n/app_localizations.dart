@@ -526,6 +526,10 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Nguyen Tri Dung'**
   String get settings_developer_name;
+
+  String get ready;
+  String get notReady;
+  String get cancelReady;
 }
 
 class _AppLocalizationsDelegate extends LocalizationsDelegate<AppLocalizations> {

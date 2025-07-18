@@ -227,4 +227,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get settings_developer_name => 'Nguyen Tri Dung';
+
+  @override
+  String get ready => 'Ready';
+  @override
+  String get notReady => 'Not ready';
+  @override
+  String get cancelReady => 'Cancel ready';
 }

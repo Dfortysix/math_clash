@@ -70,5 +70,8 @@
   "roomHost": "Room Host",
   "sounds": "Sounds",
   "settings_developer": "Developer:",
-  "settings_developer_name": "Nguyen Tri Dung"
+  "settings_developer_name": "Nguyen Tri Dung",
+  "ready": "Ready",
+  "notReady": "Not ready",
+  "cancelReady": "Cancel ready"
 } 

@@ -227,4 +227,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get settings_developer_name => 'Nguyễn Trí Dũng';
+
+  @override
+  String get ready => 'Sẵn sàng';
+  @override
+  String get notReady => 'Chưa sẵn sàng';
+  @override
+  String get cancelReady => 'Hủy sẵn sàng';
 }

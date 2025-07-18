@@ -148,6 +148,27 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     }
   }
 
+  // Đánh dấu sẵn sàng hoặc hủy sẵn sàng cho user hiện tại
+  Future<void> setReady(String userId, bool ready) async {
+    if (state.room == null) return;
+    final roomId = state.room!.roomId;
+    final players = List<PlayerInRoom>.from(state.room!.players);
+    final index = players.indexWhere((p) => p.userId == userId);
+    if (index == -1) return;
+    players[index] = PlayerInRoom(
+      userId: players[index].userId,
+      displayName: players[index].displayName,
+      avatarUrl: players[index].avatarUrl,
+      score: players[index].score,
+      ready: ready,
+    );
+    // Cập nhật lên Firestore
+    await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
+      'players': players.map((e) => e.toMap()).toList(),
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   @override
   void dispose() {
     _roomSub?.cancel();

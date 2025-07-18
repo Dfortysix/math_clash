@@ -59,6 +59,9 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
 
     final isHost = room.players.isNotEmpty && room.players.first.userId == currentUser?.uid;
     final canStartGame = room.players.length >= 2 && isHost && room.status == 'waiting';
+    final isCurrentUserReady = room.players.any((p) => p.userId == currentUser?.uid && p.ready);
+    final canShowReadyButton = currentUser != null && !isHost;
+    final canShowStartButton = room.players.length == 2 && isHost && room.players.every((p) => p.ready);
 
     return Scaffold(
       appBar: AppBar(
@@ -144,13 +147,13 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                                                  Text(
-                            AppLocalizations.of(context)!.playersInRoom,
-                            style: const TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.bold,
-                            ),
+                        Text(
+                          AppLocalizations.of(context)!.playersInRoom,
+                          style: const TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
+                        ),
                         const SizedBox(height: 16),
                         SizedBox(
                           height: 200, // Giới hạn chiều cao
@@ -217,22 +220,52 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
                                       ],
                                     ],
                                   ),
-                                  subtitle: Text('${AppLocalizations.of(context)!.score}: ${player.score}'),
-                                  trailing: player.ready
-                                      ? const Icon(Icons.check_circle, color: Colors.green)
-                                      : const Icon(Icons.schedule, color: Colors.orange),
+                                  subtitle: Row(
+                                    children: [
+                                      Text('${AppLocalizations.of(context)!.score}: ${player.score}'),
+                                      const SizedBox(width: 12),
+                                      player.ready
+                                        ? Row(children: [
+                                            const Icon(Icons.check_circle, color: Colors.green, size: 18),
+                                            const SizedBox(width: 4),
+                                            Text(AppLocalizations.of(context)!.ready, style: const TextStyle(color: Colors.green)),
+                                          ])
+                                        : Row(children: [
+                                            const Icon(Icons.hourglass_empty, color: Colors.orange, size: 18),
+                                            const SizedBox(width: 4),
+                                            Text(AppLocalizations.of(context)!.notReady, style: const TextStyle(color: Colors.orange)),
+                                          ]),
+                                    ],
+                                  ),
                                 ),
                               );
                             },
                           ),
                         ),
+                        const SizedBox(height: 20),
+                        if (canShowReadyButton)
+                          SizedBox(
+                            width: double.infinity,
+                            child: ElevatedButton.icon(
+                              icon: Icon(isCurrentUserReady ? Icons.close : Icons.check),
+                              label: Text(isCurrentUserReady ? AppLocalizations.of(context)!.cancelReady : AppLocalizations.of(context)!.ready),
+                              onPressed: () async {
+                                await ref.read(pvpRoomProvider.notifier).setReady(currentUser!.uid, !isCurrentUserReady);
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: isCurrentUserReady ? Colors.orange : Colors.green,
+                                foregroundColor: Colors.white,
+                                padding: const EdgeInsets.symmetric(vertical: 14),
+                              ),
+                            ),
+                          ),
                       ],
                     ),
                   ),
                 ),
 
                 // Nút bắt đầu game
-                if (canStartGame) ...[
+                if (canShowStartButton) ...[
                   const SizedBox(height: 20),
                   SizedBox(
                     width: double.infinity,
