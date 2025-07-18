@@ -5,6 +5,7 @@ import '../../providers/pvp_room_provider.dart';
 import '../../providers/auth_provider.dart';
 import '../../models/pvp_room.dart';
 import '../../l10n/app_localizations.dart';
+import 'pvp_game_screen.dart';
 
 class PvPRoomScreen extends ConsumerStatefulWidget {
   final String roomId;
@@ -50,6 +51,15 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
     final room = pvpRoomState.room;
     final authState = ref.watch(authProvider);
     final currentUser = authState.user;
+
+    // Nếu phòng chuyển sang playing, điều hướng sang PvPGameScreen
+    if (room != null && room.status == 'playing') {
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(builder: (context) => PvPGameScreen(roomId: room.roomId)),
+        );
+      });
+    }
 
     if (room == null) {
       return const Scaffold(
@@ -291,11 +301,8 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
                     child: ElevatedButton.icon(
                       icon: const Icon(Icons.play_arrow),
                       label: Text(AppLocalizations.of(context)!.startGame, style: const TextStyle(fontSize: 18)),
-                      onPressed: () {
-                        // TODO: Chuyển sang màn hình chơi PvP
-                        ScaffoldMessenger.of(context).showSnackBar(
-                          SnackBar(content: Text(AppLocalizations.of(context)!.featureInDevelopment)),
-                        );
+                      onPressed: () async {
+                        await ref.read(pvpRoomProvider.notifier).startGame();
                       },
                       style: ElevatedButton.styleFrom(
                         backgroundColor: Colors.green,

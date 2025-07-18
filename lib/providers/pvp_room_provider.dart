@@ -181,6 +181,16 @@ class PvPRoomNotifier extends StateNotifier<PvPRoomState> {
     });
   }
 
+  // Chủ phòng bắt đầu game
+  Future<void> startGame() async {
+    if (state.room == null) return;
+    final roomId = state.room!.roomId;
+    await FirebaseFirestore.instance.collection('pvp_rooms').doc(roomId).update({
+      'status': 'playing',
+      'updatedAt': FieldValue.serverTimestamp(),
+    });
+  }
+
   @override
   void dispose() {
     _roomSub?.cancel();
