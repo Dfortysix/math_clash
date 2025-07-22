@@ -166,56 +166,105 @@ class _PvPGameScreenState extends ConsumerState<PvPGameScreen> {
     return Scaffold(
       appBar: AppBar(
         title: Text(AppLocalizations.of(context)!.pvpMode),
-        backgroundColor: Colors.green,
+        backgroundColor: Colors.green.shade700,
         foregroundColor: Colors.white,
+        elevation: 0,
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.stretch,
-          children: [
-            // Header giống solo mode
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Text(
-                  '${AppLocalizations.of(context)!.question} '
-                  '${(_currentQuestionIndex + 1 > totalQuestions ? totalQuestions : _currentQuestionIndex + 1)}/$totalQuestions',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
+      body: Container(
+        decoration: const BoxDecoration(
+          gradient: LinearGradient(
+            begin: Alignment.topLeft,
+            end: Alignment.bottomRight,
+            colors: [
+              Color(0xFFE8F5E9),
+              Color(0xFFC8E6C9),
+              Color(0xFFA5D6A7),
+            ],
+          ),
+        ),
+        child: Padding(
+          padding: const EdgeInsets.all(16),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Header đẹp hơn
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 8),
+                decoration: BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(18),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.green.withOpacity(0.08),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ],
                 ),
-                Text(
-                  '${AppLocalizations.of(context)!.score}: $myScore',
-                  style: const TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-                ),
-                Container(
-                  padding: const EdgeInsets.all(10),
-                  decoration: BoxDecoration(
-                    color: _getTimeColor(_time),
-                    borderRadius: BorderRadius.circular(10),
+                child: SingleChildScrollView(
+                  scrollDirection: Axis.horizontal,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      const Icon(Icons.question_answer, color: Colors.green, size: 24),
+                      const SizedBox(width: 6),
+                      Text(
+                        '${AppLocalizations.of(context)!.question} '
+                        '${(_currentQuestionIndex + 1 > totalQuestions ? totalQuestions : _currentQuestionIndex + 1)}/$totalQuestions',
+                        style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.green),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
+                      const SizedBox(width: 10),
+                      IntrinsicWidth(
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                          decoration: BoxDecoration(
+                            color: _getTimeColor(_time),
+                            borderRadius: BorderRadius.circular(12),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.timer, color: Colors.white, size: 18),
+                              const SizedBox(width: 2),
+                              Text(
+                                AppLocalizations.of(context)!.timeRemaining(_time.toString()),
+                                style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold, color: Colors.white),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
                   ),
-                  child: Text(
-                    AppLocalizations.of(context)!.timeRemaining(_time.toString()),
-                    style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold, color: Colors.white),
-                  ),
                 ),
-              ],
-            ),
-            const SizedBox(height: 16),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                _buildPlayerInfo(context, me, isMe: true),
-                _buildPlayerInfo(context, opponent, isMe: false),
-              ],
-            ),
-            const SizedBox(height: 16),
-            if (_showResult)
-              _buildFinishScreen(context, myScore, opponentScore)
-            else if (isGameOver)
-              Center(child: Text(AppLocalizations.of(context)!.waitingForOpponent))
-            else
-              _buildQuestion(context, questions[_currentQuestionIndex] as Map<String, dynamic>, _currentQuestionIndex, totalQuestions, me, room),
-          ],
+              ),
+              const SizedBox(height: 18),
+              // Avatars
+              Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 4),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Flexible(child: _buildPlayerInfo(context, me, isMe: true, avatarSize: 48)),
+                    const SizedBox(width: 8),
+                    Flexible(child: _buildPlayerInfo(context, opponent, isMe: false, avatarSize: 48)),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 18),
+              if (_showResult)
+                _buildFinishScreen(context, myScore, opponentScore)
+              else
+                (isGameOver
+                  ? Center(child: Text(AppLocalizations.of(context)!.waitingForOpponent, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, color: Colors.green)))
+                  : _buildQuestion(context, questions[_currentQuestionIndex] as Map<String, dynamic>, _currentQuestionIndex, totalQuestions, me, room)),
+            ],
+          ),
         ),
       ),
     );
@@ -225,26 +274,35 @@ class _PvPGameScreenState extends ConsumerState<PvPGameScreen> {
     return isFinished || currentQuestion == null;
   }
 
-  Widget _buildPlayerInfo(BuildContext context, player, {required bool isMe}) {
+  Widget _buildPlayerInfo(BuildContext context, player, {required bool isMe, double avatarSize = 50}) {
     return Column(
+      mainAxisSize: MainAxisSize.min,
+      crossAxisAlignment: CrossAxisAlignment.center,
       children: [
         CircleAvatar(
+          radius: avatarSize / 2,
           backgroundImage: player.avatarUrl.isNotEmpty ? NetworkImage(player.avatarUrl) : null,
-          child: player.avatarUrl.isEmpty ? const Icon(Icons.person) : null,
+          child: player.avatarUrl.isEmpty ? const Icon(Icons.person, size: 28) : null,
         ),
         const SizedBox(height: 4),
         Text(
           isMe ? AppLocalizations.of(context)!.you : player.displayName,
-          style: TextStyle(fontWeight: FontWeight.bold, color: isMe ? Colors.green : Colors.blue),
+          style: TextStyle(fontWeight: FontWeight.bold, color: isMe ? Colors.green : Colors.blue, fontSize: 15),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
         ),
         Text(
           isMe
               ? '${AppLocalizations.of(context)!.score}: $_score'
               : '${AppLocalizations.of(context)!.score}: ${player.score}',
-          style: const TextStyle(fontSize: 16),
+          style: const TextStyle(fontSize: 14, color: Colors.black87),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
+          textAlign: TextAlign.center,
         ),
         if (player.isFinished)
-          Text(AppLocalizations.of(context)!.finished, style: const TextStyle(color: Colors.grey)),
+          Text(AppLocalizations.of(context)!.finished, style: const TextStyle(color: Colors.grey, fontSize: 12)),
       ],
     );
   }
@@ -252,32 +310,41 @@ class _PvPGameScreenState extends ConsumerState<PvPGameScreen> {
   Widget _buildQuestion(BuildContext context, Map<String, dynamic> question, int index, int total, player, room) {
     final options = List<String>.from(question['options'] ?? []);
     final correctAnswer = question['correctAnswer'];
-    final difficulty = (question['difficulty'] ?? 1) is int ? question['difficulty'] ?? 1 : (question['difficulty'] ?? 1).toInt();
+    final difficultyRaw = question['difficulty'] ?? 1;
+    final int difficulty = difficultyRaw is int ? difficultyRaw : (difficultyRaw as num).toInt();
     return Expanded(
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          // Khung câu hỏi
+          // Khung câu hỏi nổi bật
           Container(
             width: double.infinity,
-            padding: const EdgeInsets.all(20),
+            padding: const EdgeInsets.all(24),
             decoration: BoxDecoration(
-              color: Colors.grey[100],
-              borderRadius: BorderRadius.circular(15),
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(18),
+              boxShadow: [
+                BoxShadow(
+                  color: Colors.green.withOpacity(0.10),
+                  blurRadius: 16,
+                  offset: const Offset(0, 6),
+                ),
+              ],
             ),
             child: Text(
               question['content'] ?? '',
-              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
+              style: const TextStyle(fontSize: 26, fontWeight: FontWeight.bold, color: Colors.green),
               textAlign: TextAlign.center,
             ),
           ),
-          const SizedBox(height: 40),
+          const SizedBox(height: 36),
+          // Đáp án
           Expanded(
             child: GridView.builder(
               gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 2,
-                crossAxisSpacing: 15,
-                mainAxisSpacing: 15,
+                crossAxisSpacing: 18,
+                mainAxisSpacing: 18,
               ),
               itemCount: options.length,
               itemBuilder: (context, idx) {
@@ -308,77 +375,84 @@ class _PvPGameScreenState extends ConsumerState<PvPGameScreen> {
                       opacity = 0.5;
                     }
                   }
+                } else if (isSelected) {
+                  bgColor = Colors.green.shade50;
                 }
 
                 return AnimatedOpacity(
                   duration: const Duration(milliseconds: 200),
                   opacity: opacity,
-                  child: SizedBox.expand(
-                    child: Stack(
-                      alignment: Alignment.center,
-                      children: [
-                        Positioned.fill(
-                          child: ElevatedButton(
-                            onPressed: (_isAnimating || _selectedAnswer != null)
-                                ? null
-                                : () async {
-                                    final isCorrect = opt == correctAnswer;
-                                    setState(() {
-                                      _selectedAnswer = opt;
-                                      _isCorrect = isCorrect;
-                                      _isAnimating = true;
-                                    });
-                                    await _playAnswerSound(isCorrect);
-                                    await Future.delayed(const Duration(milliseconds: 900));
-                                    int scoreDelta = 0;
-                                    if (isCorrect) {
-                                      final int baseScore = 10;
-                                      final int diffInt = difficulty is int ? difficulty : (difficulty as num).toInt();
-                                      final int timeBonus = (_time / 5).round().toInt();
-                                      scoreDelta = baseScore * diffInt * timeBonus;
-                                    }
+                  child: Stack(
+                    alignment: Alignment.center,
+                    children: [
+                      Positioned.fill(
+                        child: ElevatedButton(
+                          onPressed: (_isAnimating || _selectedAnswer != null)
+                              ? null
+                              : () async {
+                                  setState(() {
+                                    _selectedAnswer = opt;
+                                    _isCorrect = isCorrectAnswer;
+                                    _isAnimating = true;
+                                  });
+                                  await _playAnswerSound(isCorrectAnswer);
+                                  await Future.delayed(const Duration(milliseconds: 900));
+                                  int timeBonus = (_time / 5).round();
+                                  int baseScore = 10;
+                                  int scoreDelta = baseScore * difficulty * timeBonus;
+                                  if (isCorrectAnswer) {
                                     setState(() {
                                       _score += scoreDelta;
-                                      _selectedAnswer = null;
-                                      _isCorrect = null;
-                                      _isAnimating = false;
-                                      _currentQuestionIndex++;
-                                      _timer?.cancel();
-                                      _timerActive = false;
-                                      if (_currentQuestionIndex >= total) {
-                                        _finishGame(context, total);
-                                      }
                                     });
-                                  },
-                            style: ElevatedButton.styleFrom(
-                              backgroundColor: bgColor,
-                              foregroundColor: const Color(0xFF0052D4),
-                              shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(15),
-                                side: const BorderSide(color: Color(0xFF0ED2F7), width: 2),
-                              ),
-                              elevation: 6,
-                              shadowColor: Colors.black12,
-                              splashFactory: InkRipple.splashFactory,
-                              padding: const EdgeInsets.symmetric(vertical: 16),
+                                  }
+                                  await ref.read(pvpRoomProvider.notifier).answerQuestionPvp(
+                                    userId: _userId,
+                                    answer: opt,
+                                    scoreDelta: isCorrectAnswer ? scoreDelta : 0,
+                                    isLastQuestion: _currentQuestionIndex + 1 >= total,
+                                  );
+                                  setState(() {
+                                    _selectedAnswer = null;
+                                    _isCorrect = null;
+                                    _isAnimating = false;
+                                    _currentQuestionIndex++;
+                                    _timer?.cancel();
+                                    _timerActive = false;
+                                    if (_currentQuestionIndex >= total) {
+                                      _finishGame(context, total);
+                                    }
+                                  });
+                                },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: bgColor,
+                            foregroundColor: const Color(0xFF0052D4),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(16),
+                              side: BorderSide(color: isSelected ? Colors.green : const Color(0xFF0ED2F7), width: 2),
                             ),
-                            child: Text(opt, style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold, letterSpacing: 1)),
+                            elevation: 8,
+                            shadowColor: Colors.greenAccent.withOpacity(0.15),
+                            splashFactory: InkRipple.splashFactory,
+                          ),
+                          child: Text(
+                            opt,
+                            style: const TextStyle(fontSize: 22, fontWeight: FontWeight.bold, letterSpacing: 1),
                           ),
                         ),
-                        if (showTick)
-                          const Positioned(
-                            right: 12,
-                            top: 12,
-                            child: Icon(Icons.check_circle, color: Colors.green, size: 32),
-                          ),
-                        if (showCross)
-                          const Positioned(
-                            right: 12,
-                            top: 12,
-                            child: Icon(Icons.cancel, color: Colors.red, size: 32),
-                          ),
-                      ],
-                    ),
+                      ),
+                      if (showTick)
+                        const Positioned(
+                          right: 14,
+                          top: 14,
+                          child: Icon(Icons.check_circle, color: Colors.green, size: 34),
+                        ),
+                      if (showCross)
+                        const Positioned(
+                          right: 14,
+                          top: 14,
+                          child: Icon(Icons.cancel, color: Colors.red, size: 34),
+                        ),
+                    ],
                   ),
                 );
               },
