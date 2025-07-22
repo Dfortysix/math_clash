@@ -248,4 +248,7 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get draw => 'Draw!';
+
+  @override
+  String get waitingForOpponent => 'Waiting for your opponent to finish...';
 }

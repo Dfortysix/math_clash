@@ -263,6 +263,12 @@ abstract class AppLocalizations {
   /// **'Waiting for other players...'**
   String get waitingForPlayers;
 
+  /// No description provided for @waitingForOpponent.
+  ///
+  /// In en, this message translates to:
+  /// **'Waiting for other players...'**
+  String get waitingForOpponent;
+
   /// No description provided for @enterRoomCode.
   ///
   /// In en, this message translates to:

@@ -77,5 +77,6 @@
   "kick": "Kick",
   "win": "Bạn thắng!",
   "lose": "Bạn thua!",
-  "draw": "Hòa!"
+  "draw": "Hòa!",
+  "waitingForOpponent": "Đang chờ đối thủ hoàn thành..."
 } 

@@ -77,5 +77,6 @@
   "kick": "Kick",
   "win": "You win!",
   "lose": "You lose!",
-  "draw": "Draw!"
+  "draw": "Draw!",
+  "waitingForOpponent": "Waiting for your opponent to finish..."
 } 

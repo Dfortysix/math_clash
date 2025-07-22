@@ -248,4 +248,7 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get draw => 'Hòa!';
+
+  @override
+  String get waitingForOpponent => 'Đang chờ đối thủ hoàn thành...';
 }
