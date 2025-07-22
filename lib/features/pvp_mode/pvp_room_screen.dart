@@ -68,12 +68,12 @@ class _PvPRoomScreenState extends ConsumerState<PvPRoomScreen> with WidgetsBindi
     }
 
     final isHost = room.players.isNotEmpty && room.players.first.userId == currentUser?.uid;
-    final canStartGame = room.players.length >= 2 && isHost && room.status == 'waiting';
-    final isCurrentUserReady = room.players.any((p) => p.userId == currentUser?.uid && p.ready);
     final canShowReadyButton = currentUser != null && !isHost;
+    // Sửa lại cho phép ai cũng có thể bắt đầu nếu đủ 2 người và tất cả đều ready
     final canShowStartButton = room.players.length == 2 &&
-      isHost &&
-      room.players.where((p) => p.userId != currentUser?.uid).every((p) => p.ready);
+      room.players.every((p) => p.ready) &&
+      room.status == 'waiting';
+    final isCurrentUserReady = room.players.any((p) => p.userId == currentUser?.uid && p.ready);
 
     return Scaffold(
       appBar: AppBar(
